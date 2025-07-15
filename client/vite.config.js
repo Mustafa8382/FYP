@@ -1,5 +1,5 @@
 import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react-swc';
+import react from '@vitejs/plugin-react-swc'
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -12,4 +12,7 @@ export default defineConfig({
     },
   },
   plugins: [react()],
-});
+  build: {
+    chunkSizeWarningLimit: 2000, // 2000 KB = 2 MB
+  },
+})
