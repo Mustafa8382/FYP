@@ -14,12 +14,12 @@ export default function ListingItem({ listing }) {
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 shadow-md hover:shadow-lg transition-shadow overflow-hidden rounded-lg w-full sm:w-[330px] relative border dark:border-gray-700">
+    <div className="bg-white dark:bg-gray-800 shadow-md hover:shadow-lg transition-shadow overflow-hidden rounded-2xl w-full sm:w-full md:max-w-md lg:max-w-[450px] relative border dark:border-gray-700">
       {/* Share Button */}
       <div className="absolute top-2 right-2 z-20">
         <button
           onClick={handleCopy}
-          className="bg-white dark:bg-gray-700 p-2 rounded-full shadow-md hover:bg-gray-100 dark:hover:bg-gray-600 transition"
+          className="bg-white dark:bg-gray-700 p-2 rounded-full shadow hover:bg-gray-100 dark:hover:bg-gray-600 transition"
           title="Copy Listing Link"
         >
           <FaShareAlt className="text-gray-600 dark:text-gray-300 w-4 h-4" />
@@ -34,40 +34,44 @@ export default function ListingItem({ listing }) {
       <Link to={`/listing/${listing._id}`}>
         {/* Image Section */}
         <div className="relative">
-          <div className="absolute top-2 left-2 bg-white text-black dark:bg-gray-200 px-2 py-1 text-xs font-semibold rounded-md shadow-sm z-10">
+          <div className="absolute top-2 left-2 bg-white text-black dark:bg-gray-200 px-2 py-1 text-xs font-semibold rounded shadow z-10">
             {listing.type}
           </div>
-
           <img
             src={
               listing.imageUrls[0] ||
               'https://53.fs1.hubspotusercontent-na1.net/hub/53/hubfs/Sales_Blog/real-estate-business-compressor.jpg?width=595&height=400&name=real-estate-business-compressor.jpg'
             }
             alt="listing cover"
-            className="h-[320px] sm:h-[220px] w-full object-cover hover:scale-105 transition-transform duration-300"
+            className="h-[220px] sm:h-[240px] md:h-[260px] w-full object-fit transition-transform duration-300 hover:scale-105"
           />
         </div>
 
         {/* Content Section */}
-        <div className="p-5 flex flex-col gap-5 w-full text-gray-700 dark:text-gray-100">
+        <div className="p-4 sm:p-5 flex flex-col gap-4 text-gray-700 dark:text-gray-100">
+
           {/* Title */}
-          <h2 className="text-2xl font-bold text-slate-800 dark:text-white relative w-fit">
+          <h2 className="text-xl font-bold text-slate-800 dark:text-white">
             {listing.name}
           </h2>
 
           {/* Address */}
-          <div className="flex items-center gap-2 text-xs font-medium bg-white/70 dark:bg-gray-700/60 backdrop-blur-md px-3 py-1 rounded-full w-fit shadow-inner border border-gray-200 dark:border-gray-600">
-            <MdLocationOn className="text-green-600 w-4 h-4" />
-            <span className="truncate">{listing.address}</span>
+          <div className="flex items-center gap-2 text-xs font-medium bg-white/70 dark:bg-gray-700/60 backdrop-blur-md px-3 py-1 rounded-full w-fit max-w-full border border-gray-200 dark:border-gray-600 shadow-inner overflow-hidden">
+            <MdLocationOn className="text-green-600 w-4 h-4 flex-shrink-0" />
+            <span
+              className="truncate max-w-[160px] sm:max-w-[220px] md:max-w-[280px]"
+              title={listing.address}
+            >
+              {listing.address}
+            </span>
           </div>
 
           {/* Description */}
-          <p className="text-gray-600 dark:text-gray-300 text-sm line-clamp-2 leading-relaxed italic">
+          <p className="text-gray-600 dark:text-gray-300 text-sm line-clamp-2 italic leading-snug">
             {listing.description}
           </p>
 
-          {/* Divider */}
-          <div className="border-t border-dashed border-gray-300 dark:border-gray-600"></div>
+          <hr className="border-dashed border-gray-300 dark:border-gray-600" />
 
           {/* Price */}
           <div className="flex justify-between items-center">
@@ -86,7 +90,7 @@ export default function ListingItem({ listing }) {
           </div>
 
           {/* Feature Badges */}
-          <div className="flex gap-4 text-sm mt-2">
+          <div className="flex gap-4 flex-wrap text-sm mt-2">
             <div className="flex items-center gap-2 bg-slate-100 dark:bg-gray-700 px-3 py-1 rounded-full text-slate-700 dark:text-gray-200 shadow-sm hover:bg-slate-200 dark:hover:bg-gray-600 transition">
               <MdKingBed className="w-4 h-4" />
               <span className="text-xs font-medium">

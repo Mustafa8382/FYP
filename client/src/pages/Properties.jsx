@@ -219,26 +219,38 @@ export default function Properties() {
         </div>
         
         {/* Listings */}
-        <div className="flex-1 flex flex-col items-center justify-center mt-10">
-          <div className="p-7 flex flex-wrap gap-4">
+        <div className="flex-1 flex flex-col items-center justify-center py-10 px-4 sm:px-6 lg:px-12">
+          <div className="w-full max-w-7xl">
             {!loading && listings.length === 0 && (
-              <p className="text-xl text-slate-700 dark:text-gray-300">No listing found!</p>
+              <p className="text-xl text-slate-700 dark:text-gray-300 text-center py-10">
+                No listing found!
+              </p>
             )}
+
             {loading && (
-              <p className="text-xl text-slate-700 dark:text-gray-300 text-center w-full">
+              <p className="text-xl text-slate-700 dark:text-gray-300 text-center py-10">
                 Loading...
               </p>
             )}
-            {!loading && listings.map((listing) => (
-              <ListingItem key={listing._id} listing={listing} />
-            ))}
+
+            {/* Responsive Grid for Listings */}
+            {!loading && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 md:gap-10">
+                {listings.map((listing) => (
+                  <ListingItem key={listing._id} listing={listing} />
+                ))}
+              </div>
+            )}
+
             {showMore && (
-              <button
-                onClick={onShowMoreClick}
-                className="text-green-700 dark:text-green-400 hover:underline p-7 text-center w-full"
-              >
-                Show more
-              </button>
+              <div className="w-full flex justify-center mt-8">
+                <button
+                  onClick={onShowMoreClick}
+                  className="text-green-700 dark:text-green-400 hover:underline text-lg font-medium"
+                >
+                  Show more
+                </button>
+              </div>
             )}
           </div>
         </div>
