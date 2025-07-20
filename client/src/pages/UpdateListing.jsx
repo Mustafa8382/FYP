@@ -259,11 +259,11 @@ export default function UpdateListing() {
             </p>
             <div className="flex gap-4">
               <input
-                onChange={(e) => setFiles(e.target.files)}
                 type="file"
                 id="images"
                 accept="image/*"
                 multiple
+                onChange={(e) => setFiles(e.target.files)}
                 className="p-3 border border-gray-300 dark:border-gray-700 rounded w-full bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100"
               />
               <button
