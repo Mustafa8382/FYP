@@ -30,6 +30,7 @@ export default function Profile() {
   const [updateSuccess, setUpdateSuccess] = useState(false);
   const [showListingsError, setShowListingsError] = useState(false);
   const [userListings, setUserListings] = useState([]);
+  const [showListingsVisible, setShowListingsVisible] = useState(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -122,13 +123,16 @@ export default function Profile() {
   const handleShowListings = async () => {
     try {
       setShowListingsError(false);
-      const res = await fetch(`/Api/user/listings/${currentUser._id}`);
-      const data = await res.json();
-      if (data.success === false) {
-        setShowListingsError(true);
-        return;
+      if (!showListingsVisible) {
+        const res = await fetch(`/Api/user/listings/${currentUser._id}`);
+        const data = await res.json();
+        if (data.success === false) {
+          setShowListingsError(true);
+          return;
+        }
+        setUserListings(data);
       }
-      setUserListings(data);
+      setShowListingsVisible((prev) => !prev);
     } catch (error) {
       setShowListingsError(true);
     }
@@ -241,17 +245,37 @@ export default function Profile() {
         <p className="text-green-700 dark:text-green-400 mt-5">
           {updateSuccess ? 'User is updated successfully!' : ''}
         </p>
+
+        {/* Listings Toggle Button */}
         <button
           onClick={handleShowListings}
-          className="text-green-700 dark:text-green-400 w-full"
-        >
-          Show Listings
+          className="text-green-700 dark:text-green-400 w-full flex items-center justify-center gap-2 mt-4">
+          {showListingsVisible ? (
+            <>
+              <span>Hide Listings</span>
+              {/* Heroicon Eye Off */}
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+                <path d="M17.94 17.94A10.05 10.05 0 0112 19c-4.48 0-8.29-2.94-9.54-7 0-.69.1-1.36.27-2M6.38 6.38A9.985 9.985 0 0112 5c4.48 0 8.29 2.94 9.54 7-.26.82-.63 1.59-1.08 2.3M1 1l22 22" />
+                <path d="M9.88 9.88a3 3 0 014.24 4.24" />
+              </svg>
+            </>
+          ) : (
+            <>
+              <span>Show Listings</span>
+              {/* Heroicon Eye */}
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+                <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
+            </>
+          )}
         </button>
+
         <p className="text-red-700 dark:text-red-400 mt-5">
           {showListingsError ? 'Error showing listings' : ''}
         </p>
 
-        {userListings && userListings.length > 0 && (
+        {showListingsVisible && userListings.length > 0 && (
           <div className="flex flex-col gap-4">
             <h1 className="text-center mt-7 text-2xl font-semibold">
               Your Listings
