@@ -40,7 +40,7 @@ export default function Header() {
                 : 'hover:text-blue-600'
             } transition`}
           >
-            <FaHome className="text-blue-600" /> Home
+            Home
           </Link>
           <Link
             to="/about"
@@ -50,7 +50,7 @@ export default function Header() {
                 : 'hover:text-blue-600'
             } transition`}
           >
-            <FaInfoCircle className="text-pink-600" /> About
+            About
           </Link>
           <Link
             to="/properties"
@@ -60,7 +60,7 @@ export default function Header() {
                 : 'hover:text-blue-600'
             } transition`}
           >
-            <FaBuilding className="text-green-600" /> Properties
+            Properties
           </Link>
           <Link
             to="/contact2"
@@ -70,7 +70,7 @@ export default function Header() {
                 : 'hover:text-blue-600'
             } transition`}
           >
-            <FaEnvelope className="text-purple-600" /> Contact
+            Contact
           </Link>
           <Link
             to="/profile"
@@ -78,8 +78,7 @@ export default function Header() {
               isActive('/profile') || isActive('/signin')
                 ? 'bg-gradient-to-r from-indigo-400 to-indigo-600 text-white'
                 : 'hover:text-blue-600'
-            } transition`}
-          >
+            } transition`}>
             {currentUser ? (
               <>
                 <img
@@ -91,11 +90,22 @@ export default function Header() {
               </>
             ) : (
               <>
-                <FaUser className="text-indigo-600" />
-                Sign in
+                Sign In
               </>
             )}
           </Link>
+          {!currentUser && (
+            <Link
+              to="/signup"
+              className={`flex items-center gap-2 px-4 py-2 rounded-md ${
+                isActive('/signup')
+                  ? 'bg-gradient-to-r from-purple-400 to-purple-600 text-white'
+                  : 'hover:text-blue-600'
+              } transition`}
+            >
+              Sign Up
+            </Link>
+          )}
         </ul>
 
         {/* Right: Light/Dark Toggle + Mobile Menu Icon */}
@@ -201,6 +211,19 @@ export default function Header() {
               </>
             )}
           </Link>
+          {!currentUser && (
+            <Link
+              to="/signup"
+              onClick={() => setMenuOpen(false)}
+              className={`flex items-center gap-3 px-4 py-2 rounded-md ${
+                isActive('/signup')
+                  ? 'bg-gradient-to-r from-purple-400 to-purple-600 text-white'
+                  : 'bg-blue-50 dark:bg-slate-700 hover:bg-blue-100'
+              }`}
+            >
+              <FaEnvelope /> <span>Sign Up</span>
+            </Link>
+          )}
         </div>
       )}
     </section>
