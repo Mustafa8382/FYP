@@ -7,8 +7,8 @@ import {
 } from 'firebase/storage';
 import { app } from '../firebase';
 import { useSelector } from 'react-redux';
-import Footer from '../components/Footer.jsx';
 import { useNavigate } from 'react-router-dom';
+import Footer from '../components/Footer';
 
 export default function CreateListing() {
   const { currentUser } = useSelector((state) => state.user);
@@ -29,15 +29,15 @@ export default function CreateListing() {
     furnished: false,
   });
 
-  const [imageUploadError, setImageUploadError] = useState(false);
+  const [imageUploadError, setImageUploadError] = useState('');
   const [uploading, setUploading] = useState(false);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleImageSubmit = () => {
     if (files.length > 0 && files.length + formData.imageUrls.length < 7) {
       setUploading(true);
-      setImageUploadError(false);
+      setImageUploadError('');
       const promises = [];
       for (let i = 0; i < files.length; i++) {
         promises.push(storeImage(files[i]));
@@ -51,7 +51,7 @@ export default function CreateListing() {
           setUploading(false);
         })
         .catch(() => {
-          setImageUploadError('Image upload failed (2 mb max per image)');
+          setImageUploadError('Image upload failed. Max 5MB per image.');
           setUploading(false);
         });
     } else {
@@ -66,13 +66,17 @@ export default function CreateListing() {
       const storageRef = ref(storage, fileName);
       const uploadTask = uploadBytesResumable(storageRef, file);
       uploadTask.on(
-        'state_changed',
-        null,
-        (error) => reject(error),
-        () => {
-          getDownloadURL(uploadTask.snapshot.ref).then(resolve);
-        }
-      );
+  'state_changed',
+  null,
+  (error) => {
+    console.error("Firebase upload error:", error);
+    reject(error);
+  },
+  () => {
+    getDownloadURL(uploadTask.snapshot.ref).then(resolve);
+  }
+);
+
     });
   };
 
@@ -103,7 +107,7 @@ export default function CreateListing() {
 
     try {
       setLoading(true);
-      setError(false);
+      setError('');
       const res = await fetch('/Api/listing/create', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -120,170 +124,178 @@ export default function CreateListing() {
   };
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300">
-      <main className="p-3 max-w-4xl mx-auto mb-24">
-        <h1 className="text-3xl font-semibold text-center my-7">Create a Listing</h1>
-        <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-4">
-          {/* Left Section */}
-          <div className="flex flex-col gap-4 flex-1">
-            <input
-              type="text"
-              id="name"
-              placeholder="Name"
-              maxLength="62"
-              minLength="10"
-              required
-              value={formData.name}
-              onChange={handleChange}
-              className="border p-3 rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 placeholder-gray-500 dark:placeholder-gray-400"
-            />
-            <textarea
-              id="description"
-              placeholder="Description"
-              required
-              value={formData.description}
-              onChange={handleChange}
-              className="border p-3 rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 placeholder-gray-500 dark:placeholder-gray-400"
-            />
-            <input
-              type="text"
-              id="address"
-              placeholder="Address"
-              required
-              value={formData.address}
-              onChange={handleChange}
-              className="border p-3 rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 placeholder-gray-500 dark:placeholder-gray-400"
-            />
+    <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100">
+      <main className="max-w-6xl mx-auto p-4 sm:p-6 md:p-10">
+        <h1 className="text-3xl md:text-4xl font-bold text-center mb-10">
+          Create New Listing
+        </h1>
+
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col lg:flex-row gap-10"
+        >
+          {/* Left Panel */}
+          <div className="flex-1 space-y-6">
+            <div>
+              <label className="font-medium block mb-1">Property Name</label>
+              <input
+                type="text"
+                id="name"
+                required
+                maxLength="62"
+                minLength="10"
+                value={formData.name}
+                onChange={handleChange}
+                placeholder="e.g. Cozy 2 Bedroom Apartment"
+                className="w-full p-3 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 focus:outline-none focus:ring"
+              />
+            </div>
+
+            <div>
+              <label className="font-medium block mb-1">Description</label>
+              <textarea
+                id="description"
+                required
+                value={formData.description}
+                onChange={handleChange}
+                placeholder="Describe the property in detail"
+                className="w-full p-3 h-28 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 focus:outline-none focus:ring"
+              />
+            </div>
+
+            <div>
+              <label className="font-medium block mb-1">Address</label>
+              <input
+                type="text"
+                id="address"
+                required
+                value={formData.address}
+                onChange={handleChange}
+                placeholder="Enter full address"
+                className="w-full p-3 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 focus:outline-none focus:ring"
+              />
+            </div>
 
             {/* Checkboxes */}
-            <div className="flex gap-6 flex-wrap">
-              {['sale', 'rent', 'parking', 'furnished', 'offer'].map((field) => (
-                <div key={field} className="flex gap-2 items-center">
+            <div className="flex flex-wrap gap-4">
+              {['sale', 'rent', 'parking', 'furnished', 'offer'].map((option) => (
+                <label key={option} className="flex items-center gap-2 text-sm">
                   <input
                     type="checkbox"
-                    id={field}
-                    onChange={handleChange}
+                    id={option}
                     checked={
-                      field === 'sale' || field === 'rent'
-                        ? formData.type === field
-                        : formData[field]
+                      option === 'sale' || option === 'rent'
+                        ? formData.type === option
+                        : formData[option]
                     }
+                    onChange={handleChange}
                     className="w-5 h-5"
                   />
-                  <span className="capitalize">{field === 'sale' ? 'Sell' : field}</span>
-                </div>
+                  {option === 'sale' ? 'Sell' : option}
+                </label>
               ))}
             </div>
 
-            {/* Bed/Bath/Price */}
-            <div className="flex flex-wrap gap-6">
+            {/* Numeric Inputs */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-4">
               {[
-                { id: 'bedrooms', label: 'Beds' },
-                { id: 'bathrooms', label: 'Baths' },
-                { id: 'regularPrice', label: 'Regular Price' },
+                { id: 'bedrooms', label: 'Bedrooms' },
+                { id: 'bathrooms', label: 'Bathrooms' },
+                { id: 'regularPrice', label: 'Price ($)' },
               ].map(({ id, label }) => (
-                <div key={id} className="flex items-center gap-2">
+                <div key={id}>
+                  <label className="font-medium block mb-1">{label}</label>
                   <input
                     type="number"
                     id={id}
-                    min="0"
-                    max="10000000"
-                    required
                     value={formData[id]}
                     onChange={handleChange}
-                    className="p-3 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800"
+                    required
+                    className="w-full p-3 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 focus:outline-none focus:ring"
                   />
-                  <p>{label}</p>
                 </div>
               ))}
 
               {formData.offer && (
-                <div className="flex items-center gap-2">
+                <div>
+                  <label className="font-medium block mb-1">Discount Price</label>
                   <input
                     type="number"
                     id="discountPrice"
-                    min="0"
-                    max="10000000"
-                    required
                     value={formData.discountPrice}
                     onChange={handleChange}
-                    className="p-3 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800"
+                    required
+                    className="w-full p-3 border rounded-lg bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-700 focus:outline-none focus:ring"
                   />
-                  <div className="flex flex-col items-start">
-                    <p>Discounted Price</p>
-                    {formData.type === 'rent' && (
-                      <span className="text-xs">($ / month)</span>
-                    )}
-                  </div>
+                  {formData.type === 'rent' && (
+                    <p className="text-xs mt-1 text-gray-500">($ / month)</p>
+                  )}
                 </div>
               )}
             </div>
           </div>
 
-          {/* Right Section */}
-          <div className="flex flex-col flex-1 gap-4">
-            <p className="font-semibold">
-              Images:
-              <span className="font-normal text-gray-600 dark:text-gray-400 ml-2">
-                First image will be the cover (max 6)
-              </span>
-            </p>
-            <div className="flex gap-4">
-              <input
-                type="file"
-                id="images"
-                accept="image/*"
-                multiple
-                onChange={(e) => setFiles(e.target.files)}
-                className="p-3 border border-gray-300 dark:border-gray-700 rounded w-full bg-white dark:bg-gray-800"
-              />
-              <button
-                type="button"
-                onClick={handleImageSubmit}
-                disabled={uploading}
-                className="p-3 text-green-700 dark:text-green-400 border border-green-700 dark:border-green-400 rounded uppercase hover:shadow-lg disabled:opacity-80"
-              >
-                {uploading ? 'Uploading...' : 'Upload'}
-              </button>
+          {/* Right Panel */}
+          <div className="flex-1 space-y-6">
+            <div>
+              <label className="font-medium block mb-2">
+                Upload Images{' '}
+                <span className="text-sm text-gray-500">(Max 6, first is cover)</span>
+              </label>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <input
+                  type="file"
+                  multiple
+                  accept="image/*"
+                  onChange={(e) => setFiles(e.target.files)}
+                  className="flex-1 p-3 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800"
+                />
+                <button
+                  type="button"
+                  onClick={handleImageSubmit}
+                  disabled={uploading}
+                  className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition disabled:opacity-50"
+                >
+                  {uploading ? 'Uploading...' : 'Upload'}
+                </button>
+              </div>
+              {imageUploadError && (
+                <p className="text-red-600 text-sm mt-2">{imageUploadError}</p>
+              )}
             </div>
 
-            {imageUploadError && (
-              <p className="text-red-700 dark:text-red-500 text-sm">{imageUploadError}</p>
-            )}
-
-            {formData.imageUrls.length > 0 &&
-              formData.imageUrls.map((url, index) => (
-                <div
-                  key={url}
-                  className="flex justify-between p-3 border border-gray-300 dark:border-gray-700 items-center"
-                >
+            {/* Image Preview */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+              {formData.imageUrls.map((url, idx) => (
+                <div key={url} className="relative group">
                   <img
                     src={url}
-                    alt="listing"
-                    className="w-20 h-20 object-contain rounded-lg"
+                    alt="uploaded"
+                    className="w-full h-24 sm:h-28 object-cover rounded-lg border border-gray-300 dark:border-gray-700"
                   />
                   <button
+                    onClick={() => handleRemoveImage(idx)}
                     type="button"
-                    onClick={() => handleRemoveImage(index)}
-                    className="p-3 text-red-700 dark:text-red-500 rounded-lg uppercase hover:opacity-75"
+                    className="absolute top-1 right-1 bg-red-600 text-white px-2 py-1 text-xs rounded opacity-0 group-hover:opacity-100 transition"
                   >
-                    Delete
+                    ✕
                   </button>
                 </div>
               ))}
+            </div>
 
             <button
               disabled={loading || uploading}
-              className="p-3 bg-slate-700 text-white rounded-lg uppercase hover:opacity-95 disabled:opacity-80"
+              className="w-full py-3 bg-blue-700 text-white rounded-lg hover:bg-blue-800 transition disabled:opacity-50"
             >
               {loading ? 'Creating...' : 'Create Listing'}
             </button>
-            {error && <p className="text-red-700 dark:text-red-500 text-sm">{error}</p>}
+
+            {error && <p className="text-red-600 text-sm mt-2">{error}</p>}
           </div>
         </form>
       </main>
-      
-      {/* Footer */}
+
       <Footer />
     </div>
   );

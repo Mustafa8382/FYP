@@ -16,12 +16,18 @@ export default function SignIn() {
   const handleChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.id]: e.target.value,
+      [e.target.id]: e.target.value.trim(),
     });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // ✅ Field validation check added
+    if (!formData.email || !formData.password) {
+      return dispatch(signInFailure('Please fill in all fields.'));
+    }
+
     try {
       dispatch(signInStart());
       const res = await fetch('/Api/auth/signin', {

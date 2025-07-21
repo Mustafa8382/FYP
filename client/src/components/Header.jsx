@@ -4,6 +4,7 @@ import {
   FaBuilding,
   FaEnvelope,
   FaUser,
+  FaUserPlus,
 } from 'react-icons/fa';
 import { Link, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -221,7 +222,7 @@ export default function Header() {
                   : 'bg-blue-50 dark:bg-slate-700 hover:bg-blue-100'
               }`}
             >
-              <FaEnvelope /> <span>Sign Up</span>
+              <FaUserPlus /> <span>Sign Up</span>
             </Link>
           )}
         </div>

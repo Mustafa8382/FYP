@@ -1,4 +1,3 @@
-
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 // TODO: Add SDKs for Firebase products that you want to use
@@ -12,7 +11,7 @@ const firebaseConfig = {
   projectId: "form-bcc10",
   storageBucket: "form-bcc10.appspot.com",
   messagingSenderId: "314691591409",
-  appId: "1:314691591409:web:68f1bd1b1992a1ebcd1d50"
+  appId: "1:314691591409:web:1ff8325256817f90cd1d50"
 };
 
 // Initialize Firebase
