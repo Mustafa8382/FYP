@@ -931,21 +931,21 @@ export default function Home()
                 <motion.div 
                   animate={floatingAnimationfeature}
                   className="inline-flex items-center gap-2 px-6 py-3 
-                            bg-gradient-to-r from-blue-100 to-indigo-100 
-                            dark:from-blue-900/30 dark:to-indigo-900/30 
-                            text-blue-700 dark:text-blue-300 
-                            rounded-full text-sm font-semibold tracking-wide 
-                            shadow-lg border border-blue-200/50 dark:border-blue-800/40">
+                    bg-gradient-to-r from-blue-100 to-indigo-100 
+                    dark:from-blue-900/30 dark:to-indigo-900/30 
+                    text-blue-700 dark:text-blue-300 
+                    rounded-full text-sm font-semibold tracking-wide 
+                    shadow-lg border border-blue-200/50 dark:border-blue-800/40">
                   <Sparkles className="w-4 h-4" />
-                  Explore Properties
+                    Explore Properties
                   <Sparkles className="w-4 h-4" />
                 </motion.div>
               </motion.div>  
 
               <h2 className="text-5xl md:text-6xl font-bold 
-                            bg-gradient-to-r from-gray-900 via-blue-900 to-indigo-900 
-                            dark:from-white dark:via-blue-200 dark:to-indigo-200 
-                            bg-clip-text text-transparent mb-6 leading-tight">
+                  bg-gradient-to-r from-gray-900 via-blue-900 to-indigo-900 
+                  dark:from-white dark:via-blue-200 dark:to-indigo-200 
+                  bg-clip-text text-transparent mb-6 leading-tight">
                 Featured{" "}
                 <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent">
                   Properties
@@ -1090,7 +1090,7 @@ export default function Home()
               const places = ["Kasur, Pakistan", "Lulyani, Pakistan", "New York, NY", "Los Angeles, US", "Islamabad, Pakistan", "Cape Town, South Africa"];
               const ratings = [5, 5, 4, 5, 5, 4];
               const feedbacks = [
-                "Found my dream home through BuildEstate. The process was seamless and the team was incredibly helpful throughout.",
+                "Found my dream home through AMEstate. The process was seamless and the team was incredibly helpful throughout.",
                 "Exceptional service! Their attention to detail and understanding of our needs made house hunting a breeze.",
                 "Professional team that goes above and beyond. They found the perfect property within our budget.",
                 "Their AI property suggestions were on point! Found exactly what I needed faster than expected.",
