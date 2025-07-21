@@ -237,59 +237,58 @@ export default function UpdateListing() {
           </div>
 
           {/* Right Form */}
-          <div className="flex-1 flex flex-col gap-4">
-            <label className="font-semibold">
-              Upload Images (Max 6) – First image is the cover
-            </label>
-            <div className="flex gap-4 items-center">
-              <input
-                type="file"
-                accept="image/*"
-                multiple
-                onChange={(e) => setFiles(e.target.files)}
-                className="p-2 border w-full rounded-lg dark:bg-gray-800 dark:border-gray-700"
-              />
-              <button
-                type="button"
-                onClick={handleImageUpload}
-                disabled={uploading}
-                className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-60"
-              >
-                {uploading ? 'Uploading...' : 'Upload'}
-              </button>
+          <div className="flex-1 space-y-6">
+            <div>
+              <label className="font-medium block mb-2">
+                Upload Images{' '}
+                <span className="text-sm text-gray-500">(Max 6, first is cover)</span>
+              </label>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <input
+                  type="file"
+                  multiple
+                  accept="image/*"
+                  onChange={(e) => setFiles(e.target.files)}
+                  className="flex-1 p-3 border border-gray-300 dark:border-gray-700 rounded-lg bg-white dark:bg-gray-800"/>
+                <button
+                  type="button"
+                  onClick={handleImageUpload}
+                  disabled={uploading}
+                  className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition disabled:opacity-50">
+                  {uploading ? 'Uploading...' : 'Upload'}
+                </button>
+              </div>
+              {imageUploadError && (
+                <p className="text-red-600 text-sm mt-2">{imageUploadError}</p>
+              )}
             </div>
 
-            {imageUploadError && <p className="text-red-600">{imageUploadError}</p>}
-
-            {formData.imageUrls.length > 0 && (
-              <div className="flex flex-col gap-3 max-h-[300px] overflow-y-auto">
-                {formData.imageUrls.map((url, i) => (
-                  <div
-                    key={url}
-                    className="flex items-center justify-between border p-2 rounded-lg dark:border-gray-700"
-                  >
-                    <img src={url} alt={`img-${i}`} className="h-20 w-20 rounded object-cover" />
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveImage(i)}
-                      className="text-red-600 hover:underline"
-                    >
-                      Remove
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
+            {/* Image Preview */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+              {formData.imageUrls.map((url, idx) => (
+                <div key={url} className="relative group">
+                  <img
+                    src={url}
+                    alt="uploaded"
+                    className="w-full h-24 sm:h-28 object-cover rounded-lg border border-gray-300 dark:border-gray-700"/>
+                  <button
+                    onClick={() => handleRemoveImage(idx)}
+                    type="button"
+                    className="absolute top-1 right-1 bg-red-600 text-white px-2 py-1 text-xs rounded opacity-0 group-hover:opacity-100 transition">
+                    ✕
+                  </button>
+                </div>
+              ))}
+            </div>
 
             <button
               type="submit"
               disabled={loading || uploading}
-              className="bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 disabled:opacity-70"
-            >
+              className="w-full py-3 bg-blue-700 text-white rounded-lg hover:bg-blue-800 transition disabled:opacity-50">
               {loading ? 'Updating...' : 'Update Listing'}
             </button>
 
-            {error && <p className="text-red-600 text-sm">{error}</p>}
+            {error && <p className="text-red-600 text-sm mt-2">{error}</p>}
           </div>
         </form>
       </main>
