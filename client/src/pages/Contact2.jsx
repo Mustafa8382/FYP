@@ -22,7 +22,7 @@ export default function Contact2() {
     };
 
     try {
-      const res = await fetch('http://localhost:3000/Api/email/send', {
+      const res = await fetch('https://fyp-wtsn.onrender.com/Api/email/send', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
