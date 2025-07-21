@@ -6,6 +6,7 @@ import mustafaImage from '../assets/about1.jpg';
 import adeelImage from '../assets/about2.jpg';
 import Footer from '../components/Footer.jsx';
 
+
 export default function About() {
   const milestones = [
     { label: 'Projects Completed', count: 120 },
