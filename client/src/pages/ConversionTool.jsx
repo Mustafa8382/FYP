@@ -54,7 +54,7 @@ const ConversionTool = () => {
 
   return (
     <section className="bg-gradient-to-br from-blue-100 via-white to-purple-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 pt-20 ">
-      <div className="max-w-5xl mx-auto px-4 mt-12">
+      <div className="max-w-5xl mx-auto px-4 mt-13">
         {/* Heading & Language Toggle */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
           <motion.h1
