@@ -1,12 +1,8 @@
+// ... keep your existing imports
 import { useSelector } from 'react-redux';
 import { useRef, useState, useEffect } from 'react';
-import {
-  getDownloadURL,
-  getStorage,
-  ref,
-  uploadBytesResumable,
-} from 'firebase/storage';
-import { app } from '../firebase';
+import { supabase } from '../supabaseClient';
+import noAvatar from '../assets/no-avatar.png';
 import {
   updateUserStart,
   updateUserSuccess,
@@ -34,33 +30,93 @@ export default function Profile() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (file) {
-      handleFileUpload(file);
-    }
+    if (file) handleSupabaseUpload(file);
   }, [file]);
 
-  const handleFileUpload = (file) => {
-    const storage = getStorage(app);
-    const fileName = new Date().getTime() + file.name;
-    const storageRef = ref(storage, fileName);
-    const uploadTask = uploadBytesResumable(storageRef, file);
+  const handleSupabaseUpload = async (file) => {
+    setFileUploadError(false);
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Date.now()}_${Math.random().toString(36).substring(2, 8)}.${fileExt}`;
+      const filePath = `avatars/${fileName}`;
 
-    uploadTask.on(
-      'state_changed',
-      (snapshot) => {
-        const progress =
-          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        setFilePerc(Math.round(progress));
-      },
-      () => {
+      const { error: uploadError } = await supabase.storage
+        .from('am-images')
+        .upload(filePath, file, {
+          cacheControl: '3600',
+          upsert: false,
+        });
+
+      if (uploadError) {
         setFileUploadError(true);
-      },
-      () => {
-        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) =>
-          setFormData({ ...formData, avatar: downloadURL })
-        );
+        return;
       }
-    );
+
+      let progress = 0;
+      const interval = setInterval(() => {
+        progress += 10;
+        setFilePerc(progress);
+        if (progress >= 100) clearInterval(interval);
+      }, 100);
+
+      const { data: publicURLData } = supabase.storage
+        .from('am-images')
+        .getPublicUrl(filePath);
+
+      if (publicURLData?.publicUrl) {
+        setFormData({ ...formData, avatar: publicURLData.publicUrl });
+      } else {
+        setFileUploadError(true);
+      }
+    } catch (err) {
+      console.error('Supabase Upload Error:', err.message);
+      setFileUploadError(true);
+    }
+  };
+
+  const handleRemoveImage = async () => {
+    const avatarUrl = formData.avatar || currentUser.avatar;
+
+    // 1. Remove from Supabase
+    if (avatarUrl) {
+      try {
+        const path = avatarUrl.split('/storage/v1/object/public/am-images/')[1];
+        if (path) {
+          const { error: deleteError } = await supabase.storage
+            .from('am-images')
+            .remove([path]);
+          if (deleteError) {
+            console.error('Error deleting image from Supabase:', deleteError.message);
+          }
+        }
+      } catch (err) {
+        console.error('Image removal failed:', err.message);
+      }
+    }
+
+    // 2. Update MongoDB (clear avatar)
+    try {
+      dispatch(updateUserStart());
+      const res = await fetch(`/Api/user/update/${currentUser._id}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ avatar: '' }),
+      });
+
+      const data = await res.json();
+      if (data.success === false) {
+        dispatch(updateUserFailure(data.message));
+        return;
+      }
+
+      dispatch(updateUserSuccess(data));
+      setFormData((prev) => ({ ...prev, avatar: '' }));
+      setFilePerc(0);
+      setUpdateSuccess(true);
+    } catch (error) {
+      dispatch(updateUserFailure(error.message));
+      console.error('MongoDB avatar reset failed:', error.message);
+    }
   };
 
   const handleChange = (e) => {
@@ -170,14 +226,30 @@ export default function Profile() {
           />
           <img
             onClick={() => fileRef.current.click()}
-            src={ formData.avatar || currentUser.avatar}
+            src={
+              (formData.avatar?.trim() !== '' && formData.avatar) ||
+              (currentUser.avatar?.trim() !== '' && currentUser.avatar) ||
+              noAvatar
+            }
             alt="profile"
             className="rounded-full h-24 w-24 object-cover cursor-pointer self-center mt-2"
           />
+
+
+          {(formData.avatar || currentUser.avatar) && (
+            <button
+              type="button"
+              onClick={handleRemoveImage}
+              className="text-red-600 dark:text-red-400 text-sm self-center "
+            >
+              Remove Image
+            </button>
+          )}
+
           <p className="text-sm self-center">
             {fileUploadError ? (
               <span className="text-red-700 dark:text-red-400">
-                Error Image upload (image must be less than 2 mb)
+                Error uploading image (max 2MB)
               </span>
             ) : filePerc > 0 && filePerc < 100 ? (
               <span className="text-slate-700 dark:text-slate-300">{`Uploading ${filePerc}%`}</span>
@@ -189,6 +261,7 @@ export default function Profile() {
               ''
             )}
           </p>
+
           <input
             type="text"
             placeholder="username"
@@ -298,7 +371,6 @@ export default function Profile() {
                 >
                   <p>{listing.name}</p>
                 </Link>
-
                 <div className="flex flex-col items-center">
                   <button
                     onClick={() => handleListingDelete(listing._id)}

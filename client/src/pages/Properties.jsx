@@ -113,7 +113,7 @@ export default function Properties() {
           </span>
         </h2>
 
-        <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl text-center mx-auto">
+        <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl text-center mt-5 mx-auto">
           Discover a curated collection of premium properties
         </p>
 

@@ -1,9 +1,8 @@
 import { useState } from 'react';
-import { getDownloadURL, getStorage, ref, uploadBytesResumable } from 'firebase/storage';
-import { app } from '../firebase';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import Footer from '../components/Footer';
+import { supabase } from '../supabaseClient';
 
 export default function CreateListing() {
   const { currentUser } = useSelector((state) => state.user);
@@ -29,53 +28,85 @@ export default function CreateListing() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleImageSubmit = () => {
-    if (files.length > 0 && (files.length + formData.imageUrls.length) <= 6) {
-      setUploading(true);
-      setImageUploadError('');
-      const promises = [];
-      for (let i = 0; i < files.length; i++) {
-        promises.push(storeImage(files[i]));
+  const storeImage = async (file) => {
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Date.now()}-${Math.random()}.${fileExt}`;
+      const filePath = `property-images/${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('am-images')
+        .upload(filePath, file);
+
+      if (uploadError) {
+        console.error('Supabase upload error:', uploadError);
+        throw new Error(uploadError.message);
       }
-      Promise.all(promises)
-        .then((urls) => {
-          setFormData((prev) => ({
-            ...prev,
-            imageUrls: prev.imageUrls.concat(urls),
-          }));
-          setUploading(false);
-        })
-        .catch(() => {
-          setImageUploadError('Image upload failed. Max 5MB per image.');
-          setUploading(false);
-        });
-    } else {
-      setImageUploadError('You can only upload 6 images per listing');
+
+      const { data } = supabase.storage.from('am-images').getPublicUrl(filePath);
+
+      return { publicUrl: data.publicUrl, filePath };
+    } catch (err) {
+      throw err;
     }
   };
 
-  const storeImage = async (file) => {
-    return new Promise((resolve, reject) => {
-      const storage = getStorage(app);
-      const fileName = new Date().getTime() + file.name;
-      const storageRef = ref(storage, fileName);
-      const uploadTask = uploadBytesResumable(storageRef, file);
-      uploadTask.on(
-  'state_changed',
-  null,
-  (error) => {
-    console.error("Firebase upload error:", error);
-    reject(error);
-  },
-  () => {
-    getDownloadURL(uploadTask.snapshot.ref).then(resolve);
-  }
-);
+  const handleImageSubmit = () => {
+    const MAX_FILE_SIZE_MB = 5;
 
-    });
+    if (files.length === 0) {
+      setImageUploadError('Please select image files to upload.');
+      return;
+    }
+
+    if (files.length + formData.imageUrls.length > 6) {
+      setImageUploadError('You can only upload up to 6 images per listing.');
+      return;
+    }
+
+    for (let i = 0; i < files.length; i++) {
+      const fileSizeMB = files[i].size / (1024 * 1024);
+      if (fileSizeMB > MAX_FILE_SIZE_MB) {
+        setImageUploadError(`Each image must be under ${MAX_FILE_SIZE_MB} MB.`);
+        return;
+      }
+    }
+
+    setUploading(true);
+    setImageUploadError('');
+
+    const uploadPromises = Array.from(files).map((file) => storeImage(file));
+
+    Promise.all(uploadPromises)
+      .then((uploadedImages) => {
+        setFormData((prev) => ({
+          ...prev,
+          imageUrls: prev.imageUrls.concat(uploadedImages),
+        }));
+        setUploading(false);
+      })
+      .catch((err) => {
+        console.error('Image upload failed:', err);
+        setImageUploadError(`Upload failed: ${err.message}`);
+        setUploading(false);
+      });
   };
 
-  const handleRemoveImage = (index) => {
+  const handleRemoveImage = async (index) => {
+    const image = formData.imageUrls[index];
+
+    try {
+      const { error: deleteError } = await supabase.storage
+        .from('am-images')
+        .remove([image.filePath]);
+
+      if (deleteError) {
+        console.error('Failed to delete from Supabase:', deleteError);
+      }
+    } catch (err) {
+      console.error('Error deleting image:', err);
+    }
+
     setFormData((prev) => ({
       ...prev,
       imageUrls: prev.imageUrls.filter((_, i) => i !== index),
@@ -125,11 +156,7 @@ export default function CreateListing() {
           Create New Listing
         </h1>
 
-        <form
-          onSubmit={handleSubmit}
-          className="flex flex-col lg:flex-row gap-10"
-        >
-          {/* Left Panel */}
+        <form onSubmit={handleSubmit} className="flex flex-col lg:flex-row gap-10">
           <div className="flex-1 space-y-6">
             <div>
               <label className="font-medium block mb-1">Property Name</label>
@@ -171,7 +198,6 @@ export default function CreateListing() {
               />
             </div>
 
-            {/* Checkboxes */}
             <div className="flex flex-wrap gap-4">
               {['sale', 'rent', 'parking', 'furnished', 'offer'].map((option) => (
                 <label key={option} className="flex items-center gap-2 text-sm">
@@ -191,7 +217,6 @@ export default function CreateListing() {
               ))}
             </div>
 
-            {/* Numeric Inputs */}
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-4">
               {[
                 { id: 'bedrooms', label: 'Bedrooms' },
@@ -230,7 +255,6 @@ export default function CreateListing() {
             </div>
           </div>
 
-          {/* Right Panel */}
           <div className="flex-1 space-y-6">
             <div>
               <label className="font-medium block mb-2">
@@ -259,12 +283,11 @@ export default function CreateListing() {
               )}
             </div>
 
-            {/* Image Preview */}
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-              {formData.imageUrls.map((url, idx) => (
-                <div key={url} className="relative group">
+              {formData.imageUrls.map((img, idx) => (
+                <div key={img.filePath} className="relative group">
                   <img
-                    src={url}
+                    src={img.publicUrl}
                     alt="uploaded"
                     className="w-full h-24 sm:h-28 object-cover rounded-lg border border-gray-300 dark:border-gray-700"
                   />
@@ -290,7 +313,6 @@ export default function CreateListing() {
           </div>
         </form>
       </main>
-
       <Footer />
     </div>
   );
