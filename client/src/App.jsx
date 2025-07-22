@@ -11,6 +11,7 @@ import CreateListing from './pages/CreateListing';
 import UpdateListing from './pages/UpdateListing';
 import Listing from './pages/Listing';
 import Properties from './pages/Properties';
+import ConversionTool from './pages/ConversionTool';
 
 export default function App() {
   return (
@@ -24,6 +25,7 @@ export default function App() {
         <Route path='/properties' element={<Properties />} />
         <Route path="/contact2" element={<Contact2 />} />
         <Route path='/listing/:listingId' element={<Listing />} />
+        <Route path="/conversion" element={<ConversionTool />} />
 
         <Route element={<PrivateRoute />}>
           <Route path='/profile' element={<Profile />} />

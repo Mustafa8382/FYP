@@ -5,6 +5,7 @@ import {
   FaEnvelope,
   FaUser,
   FaUserPlus,
+  FaExchangeAlt
 } from 'react-icons/fa';
 import { Link, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
@@ -32,10 +33,10 @@ export default function Header() {
         </Link>
 
         {/* Center: Desktop nav */}
-        <ul className="hidden md:flex items-center gap-4 text-sm font-medium text-slate-700 dark:text-gray-200">
+        <ul className="hidden md:flex items-center gap-2 text-sm font-medium text-slate-700 dark:text-gray-200">
           <Link
             to="/"
-            className={`flex items-center gap-2 px-4 py-2 rounded-md ${
+            className={`flex items-center gap-2 px-2 py-2 rounded-md ${
               isActive('/')
                 ? 'bg-gradient-to-r from-blue-400 to-blue-600 text-white'
                 : 'hover:text-blue-600'
@@ -45,7 +46,7 @@ export default function Header() {
           </Link>
           <Link
             to="/about"
-            className={`flex items-center gap-2 px-4 py-2 rounded-md ${
+            className={`flex items-center gap-2 px-2 py-2 rounded-md ${
               isActive('/about')
                 ? 'bg-gradient-to-r from-pink-400 to-pink-600 text-white'
                 : 'hover:text-blue-600'
@@ -55,7 +56,7 @@ export default function Header() {
           </Link>
           <Link
             to="/properties"
-            className={`flex items-center gap-2 px-4 py-2 rounded-md ${
+            className={`flex items-center gap-2 px-2 py-2 rounded-md ${
               isActive('/properties')
                 ? 'bg-gradient-to-r from-green-400 to-green-600 text-white'
                 : 'hover:text-blue-600'
@@ -65,7 +66,7 @@ export default function Header() {
           </Link>
           <Link
             to="/contact2"
-            className={`flex items-center gap-2 px-4 py-2 rounded-md ${
+            className={`flex items-center gap-2 px-2 py-2 rounded-md ${
               isActive('/contact2')
                 ? 'bg-gradient-to-r from-purple-400 to-purple-600 text-white'
                 : 'hover:text-blue-600'
@@ -73,9 +74,20 @@ export default function Header() {
           >
             Contact
           </Link>
+
+          <Link
+            to="/conversion"
+            className={`flex items-center gap-2 px-2 py-2 rounded-md ${
+              isActive('/conversion')
+                ? 'bg-gradient-to-r from-blue-400 to-green-500 text-white'
+                : 'hover:text-blue-600'
+            } transition`}>
+            Converter
+          </Link>
+
           <Link
             to="/profile"
-            className={`flex items-center gap-2 px-4 py-2 rounded-md ${
+            className={`flex items-center gap-2 px-2 py-2 rounded-md ${
               isActive('/profile') || isActive('/signin')
                 ? 'bg-gradient-to-r from-indigo-400 to-indigo-600 text-white'
                 : 'hover:text-blue-600'
@@ -98,9 +110,9 @@ export default function Header() {
           {!currentUser && (
             <Link
               to="/signup"
-              className={`flex items-center gap-2 px-4 py-2 rounded-md ${
+              className={`flex items-center gap-2 px-2 py-2 rounded-md ${
                 isActive('/signup')
-                  ? 'bg-gradient-to-r from-purple-400 to-purple-600 text-white'
+                  ? 'bg-gradient-to-r from-teal-400 to-emerald-500 text-white'
                   : 'hover:text-blue-600'
               } transition`}
             >
@@ -188,6 +200,18 @@ export default function Header() {
             <FaEnvelope /> Contact
           </Link>
           <Link
+            to="/conversion"
+            onClick={() => setMenuOpen(false)}
+            className={`flex items-center gap-3 px-4 py-2 rounded-md ${
+              isActive('/conversion')
+                ? 'bg-gradient-to-r from-blue-400 to-green-500 text-white'
+                : 'bg-blue-50 dark:bg-slate-700 hover:bg-blue-100'
+            }`}
+          >
+            <FaExchangeAlt /> Converter
+          </Link>
+
+          <Link
             to="/profile"
             onClick={() => setMenuOpen(false)}
             className={`flex items-center gap-3 px-4 py-2 rounded-md ${
@@ -218,7 +242,7 @@ export default function Header() {
               onClick={() => setMenuOpen(false)}
               className={`flex items-center gap-3 px-4 py-2 rounded-md ${
                 isActive('/signup')
-                  ? 'bg-gradient-to-r from-purple-400 to-purple-600 text-white'
+                  ? 'bg-gradient-to-r from-teal-400 to-emerald-500 text-white'
                   : 'bg-blue-50 dark:bg-slate-700 hover:bg-blue-100'
               }`}
             >
