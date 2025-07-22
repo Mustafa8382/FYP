@@ -122,7 +122,7 @@ const ConversionTool = () => {
       </div>
 
       {/* Footer */}
-      <div className="mt-[65px]">
+      <div className="mt-65">
         <Footer />
       </div>
     </section>
