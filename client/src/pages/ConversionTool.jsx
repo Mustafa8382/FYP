@@ -54,21 +54,19 @@ const ConversionTool = () => {
 
   return (
     <section className="bg-gradient-to-br from-blue-100 via-white to-purple-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 pt-20 ">
-      <div className="max-w-5xl mx-auto px-4 mt-12">
+      <div className="max-w-5xl mx-auto px-4 mt-14">
         {/* Heading & Language Toggle */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+        <div className="flex flex-col sm:flex-row justify-center sm:justify-between items-center gap-4 mb-8 text-center sm:text-left">
           <motion.h1
             initial={{ opacity: 0, y: -40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
-            className={`text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-800 dark:text-white ${urduFont} break-words text-wrap`}
-          >
+            className={`text-3xl sm:text-4xl md:text-5xl font-extrabold text-slate-800 dark:text-white ${urduFont} break-words text-wrap`}>
             {t.heading}
           </motion.h1>
           <button
             onClick={() => setLang(lang === 'en' ? 'ur' : 'en')}
-            className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-semibold rounded-xl shadow transition"
-          >
+            className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-semibold rounded-xl shadow transition">
             {t.toggleLang}
           </button>
         </div>
