@@ -8,12 +8,13 @@ import { Navigation } from 'swiper/modules';
 import 'swiper/css/bundle';
 import { FaBath, FaBed, FaChair, FaMapMarkerAlt, FaParking, FaShare, FaArrowLeft, FaShareAlt } from 'react-icons/fa';
 import Contact from '../components/Contact';
+// ... rest of your imports
 
 export default function Listing() {
   SwiperCore.use([Navigation]);
   const [listing, setListing] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);3
+  const [error, setError] = useState(false);
   const [contact, setContact] = useState(false);
   const params = useParams();
   const { currentUser } = useSelector((state) => state.user);
@@ -50,25 +51,17 @@ export default function Listing() {
           {/* Top Control Bar */}
           <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-12 mb-4">
             <div className="flex flex-row justify-between items-center gap-4">
-              <Link
-                to="/properties"
-                className="group inline-flex items-center gap-2 px-3 sm:px-5 py-2 bg-white dark:bg-slate-800 text-slate-800 dark:text-white 
-                rounded-full shadow transition-all duration-200 hover:shadow-lg hover:bg-slate-50 dark:hover:bg-slate-700">
+              <Link to="/properties" className="group inline-flex items-center gap-2 px-3 sm:px-5 py-2 bg-white dark:bg-slate-800 text-slate-800 dark:text-white rounded-full shadow transition-all duration-200 hover:shadow-lg hover:bg-slate-50 dark:hover:bg-slate-700">
                 <FaArrowLeft className="text-slate-600 dark:text-slate-300 text-lg group-hover:-translate-x-1 transition-transform" />
-                <span className="hidden sm:inline group-hover:text-slate-900 dark:group-hover:text-white font-medium sm:font-semibold text-sm sm:text-base">
-                  Back to Properties
-                </span>
+                <span className="hidden sm:inline group-hover:text-slate-900 dark:group-hover:text-white font-medium sm:font-semibold text-sm sm:text-base">Back to Properties</span>
               </Link>
 
               <div className="relative">
                 <button
                   onClick={() => navigator.clipboard.writeText(window.location.href)}
-                  className="group inline-flex items-center gap-2 px-3 sm:px-5 py-2 bg-white dark:bg-slate-800 text-slate-800 dark:text-white
-                  rounded-full shadow transition-all duration-200 hover:shadow-lg hover:bg-slate-50 dark:hover:bg-slate-700">
+                  className="group inline-flex items-center gap-2 px-3 sm:px-5 py-2 bg-white dark:bg-slate-800 text-slate-800 dark:text-white rounded-full shadow transition-all duration-200 hover:shadow-lg hover:bg-slate-50 dark:hover:bg-slate-700">
                   <FaShare className="text-slate-600 dark:text-slate-300 text-lg group-hover:-translate-y-0.5 transition-transform" />
-                  <span className="hidden sm:inline font-medium sm:font-semibold text-sm sm:text-base">
-                    Share
-                  </span>
+                  <span className="hidden sm:inline font-medium sm:font-semibold text-sm sm:text-base">Share</span>
                 </button>
               </div>
             </div>
@@ -77,10 +70,13 @@ export default function Listing() {
           {/* Image Slider */}
           <Swiper navigation={{ nextEl: '.swiper-button-next-custom', prevEl: '.swiper-button-prev-custom' }} className="relative">
             {listing.imageUrls.map((url) => (
-              <SwiperSlide key={url}>
+              <SwiperSlide key={url.filePath}>
                 <div className="w-full max-w-6xl mx-auto px-3">
                   <div className="relative w-full h-[500px] rounded-2xl shadow-lg overflow-hidden group">
-                    <div className="w-full h-full bg-center bg-cover transition-all duration-500" style={{ backgroundImage: `url(${url})` }}></div>
+                    <div
+                      className="w-full h-full bg-center bg-cover transition-all duration-500"
+                      style={{ backgroundImage: `url(${url.publicUrl})` }}
+                    ></div>
                     <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl"></div>
                     <div className="swiper-button-prev-custom absolute top-1/2 left-4 transform -translate-y-1/2 z-10 bg-white/80 dark:bg-slate-800/80 text-slate-800 dark:text-white p-2 rounded-full shadow transition">
                       <svg className="w-5 h-5" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>

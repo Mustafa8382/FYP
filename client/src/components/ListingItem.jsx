@@ -39,7 +39,7 @@ export default function ListingItem({ listing }) {
           </div>
           <img
             src={
-              listing.imageUrls[0] ||
+              listing.imageUrls[0]?.publicUrl ||
               'https://53.fs1.hubspotusercontent-na1.net/hub/53/hubfs/Sales_Blog/real-estate-business-compressor.jpg?width=595&height=400&name=real-estate-business-compressor.jpg'
             }
             alt="listing cover"

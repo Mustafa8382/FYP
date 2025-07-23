@@ -285,17 +285,21 @@ export default function Profile() {
               >
                 <Link to={`/listing/${listing._id}`}>
                   <img
-                    src={listing.imageUrls[0]}
+                    src={
+                      listing.imageUrls[0]?.publicUrl ||
+                      'https://53.fs1.hubspotusercontent-na1.net/hub/53/hubfs/Sales_Blog/real-estate-business-compressor.jpg?width=595&height=400&name=real-estate-business-compressor.jpg'
+                    }
                     alt="listing cover"
                     className="h-16 w-16 object-contain"
                   />
                 </Link>
                 <Link
-                  className="text-slate-700 dark:text-slate-300 font-semibold hover:underline truncate flex-1"
+                  className="text-slate-700 dark:text-slate-300 font-semibold truncate flex-1 hover:no-"
                   to={`/listing/${listing._id}`}
                 >
                   <p>{listing.name}</p>
                 </Link>
+
 
                 <div className="flex flex-col items-center">
                   <button
