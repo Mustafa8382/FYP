@@ -69,17 +69,6 @@ const floatingAnimation = {
   }
 };
 
-// sparkle Animation for sparkle effects
-const sparkleAnimation = {
-  scale: [1, 1.2, 1],
-  rotate: [0, 180, 360],
-  transition: {
-    duration: 3,
-    repeat: Infinity,
-    ease: "easeInOut"
-  }
-};
-
 const logoVariants = {
   hidden: { opacity: 0, scale: 0.8 },
   visible: { 
@@ -320,27 +309,6 @@ export default function Home()
                   dark:from-green-900/10 dark:to-emerald-900/10 
                   rounded-full blur-3xl"
               />
-            </div>
-
-            {/* Sparkles */}
-            <div className="absolute inset-0 pointer-events-none">
-              {[...Array(6)].map((_, i) => (
-                <motion.div
-                  key={i}
-                  animate={{
-                    scale: [1, 1.2, 1],
-                    opacity: [1, 0.8, 1],
-                    transition: { duration: 4, repeat: Infinity, delay: i * 0.3 },
-                  }}
-                  className={`absolute w-6 h-6 ${
-                    i % 2 === 0 ? 'top-1/4' : 'top-3/4'
-                  } ${
-                    i % 3 === 0 ? 'left-1/4' : i % 3 === 1 ? 'left-1/2' : 'left-3/4'
-                  } text-yellow-400/60`}
-                >
-                  <Sparkles className="w-full h-full" />
-                </motion.div>
-              ))}
             </div>
           </div>
 
