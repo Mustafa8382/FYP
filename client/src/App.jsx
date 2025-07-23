@@ -12,6 +12,7 @@ import UpdateListing from './pages/UpdateListing';
 import Listing from './pages/Listing';
 import Properties from './pages/Properties';
 import ConversionTool from './pages/ConversionTool';
+import OAuth from './components/OAuth'; // update the path based on your project structure
 
 export default function App() {
   return (
@@ -26,6 +27,7 @@ export default function App() {
         <Route path="/contact2" element={<Contact2 />} />
         <Route path='/listing/:listingId' element={<Listing />} />
         <Route path="/conversion" element={<ConversionTool />} />
+        <Route path="/oauth/callback" element={<OAuth />} />
 
         <Route element={<PrivateRoute />}>
           <Route path='/profile' element={<Profile />} />

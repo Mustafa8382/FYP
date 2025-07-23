@@ -5,7 +5,6 @@ import { signInStart, signInSuccess, signInFailure } from '../redux/user/userSli
 import Footer from '../components/Footer';
 import OAuth from '../components/OAuth';
 import { Eye, EyeOff } from 'lucide-react';
-import { supabase } from '../supabaseClient'; // ✅ Make sure this is correctly set up
 
 export default function SignIn() {
   const [formData, setFormData] = useState({});
@@ -24,30 +23,29 @@ export default function SignIn() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // ✅ Field validation check added
     if (!formData.email || !formData.password) {
       return dispatch(signInFailure('Please fill in all fields.'));
     }
 
     try {
       dispatch(signInStart());
-
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email: formData.email,
-        password: formData.password,
+      const res = await fetch('/Api/auth/signin', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
       });
-
-      if (error) {
-        dispatch(signInFailure(error.message));
+      const data = await res.json();
+      if (data.success === false) {
+        dispatch(signInFailure(data.message));
         return;
       }
-
-      const user = data.user;
-
-      // Optional: You can also fetch user metadata/profile from Supabase table if needed
-      dispatch(signInSuccess(user));
+      dispatch(signInSuccess(data));
       navigate('/');
-    } catch (err) {
-      dispatch(signInFailure(err.message));
+    } catch (error) {
+      dispatch(signInFailure(error.message));
     }
   };
 

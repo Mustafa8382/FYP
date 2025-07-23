@@ -1,8 +1,5 @@
-// ... keep your existing imports
 import { useSelector } from 'react-redux';
 import { useRef, useState, useEffect } from 'react';
-import { supabase } from '../supabaseClient';
-import noAvatar from '../assets/no-avatar.png';
 import {
   updateUserStart,
   updateUserSuccess,
@@ -15,6 +12,7 @@ import {
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Footer from '../components/Footer.jsx';
+import { supabase } from '../supabaseClient.js'; // ✅ Supabase client
 
 export default function Profile() {
   const fileRef = useRef(null);
@@ -30,92 +28,40 @@ export default function Profile() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (file) handleSupabaseUpload(file);
+    if (file) {
+      handleFileUpload(file);
+    }
   }, [file]);
 
-  const handleSupabaseUpload = async (file) => {
+  const handleFileUpload = async (file) => {
     setFileUploadError(false);
-    try {
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${Date.now()}_${Math.random().toString(36).substring(2, 8)}.${fileExt}`;
-      const filePath = `avatars/${fileName}`;
+    const fileExt = file.name.split('.').pop();
+    const fileName = `${Date.now()}-${Math.random()}.${fileExt}`;
+    const filePath = `avatar/${currentUser._id}/${fileName}`;
 
-      const { error: uploadError } = await supabase.storage
-        .from('am-images')
+    try {
+      const { data, error } = await supabase.storage
+        .from('am-images') // ✅ Make sure bucket exists
         .upload(filePath, file, {
           cacheControl: '3600',
-          upsert: false,
+          upsert: true,
         });
 
-      if (uploadError) {
+      if (error) {
         setFileUploadError(true);
         return;
       }
 
-      let progress = 0;
-      const interval = setInterval(() => {
-        progress += 10;
-        setFilePerc(progress);
-        if (progress >= 100) clearInterval(interval);
-      }, 100);
-
-      const { data: publicURLData } = supabase.storage
+      // Get public URL
+      const { data: urlData } = supabase.storage
         .from('am-images')
         .getPublicUrl(filePath);
 
-      if (publicURLData?.publicUrl) {
-        setFormData({ ...formData, avatar: publicURLData.publicUrl });
-      } else {
-        setFileUploadError(true);
-      }
+      setFormData({ ...formData, avatar: urlData.publicUrl });
+      setFilePerc(100); // mark upload complete
     } catch (err) {
-      console.error('Supabase Upload Error:', err.message);
+      console.error('Upload error:', err.message);
       setFileUploadError(true);
-    }
-  };
-
-  const handleRemoveImage = async () => {
-    const avatarUrl = formData.avatar || currentUser.avatar;
-
-    // 1. Remove from Supabase
-    if (avatarUrl) {
-      try {
-        const path = avatarUrl.split('/storage/v1/object/public/am-images/')[1];
-        if (path) {
-          const { error: deleteError } = await supabase.storage
-            .from('am-images')
-            .remove([path]);
-          if (deleteError) {
-            console.error('Error deleting image from Supabase:', deleteError.message);
-          }
-        }
-      } catch (err) {
-        console.error('Image removal failed:', err.message);
-      }
-    }
-
-    // 2. Update MongoDB (clear avatar)
-    try {
-      dispatch(updateUserStart());
-      const res = await fetch(`/Api/user/update/${currentUser._id}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ avatar: '' }),
-      });
-
-      const data = await res.json();
-      if (data.success === false) {
-        dispatch(updateUserFailure(data.message));
-        return;
-      }
-
-      dispatch(updateUserSuccess(data));
-      setFormData((prev) => ({ ...prev, avatar: '' }));
-      setFilePerc(0);
-      setUpdateSuccess(true);
-    } catch (error) {
-      dispatch(updateUserFailure(error.message));
-      console.error('MongoDB avatar reset failed:', error.message);
     }
   };
 
@@ -226,33 +172,15 @@ export default function Profile() {
           />
           <img
             onClick={() => fileRef.current.click()}
-            src={
-              (formData.avatar?.trim() !== '' && formData.avatar) ||
-              (currentUser.avatar?.trim() !== '' && currentUser.avatar) ||
-              noAvatar
-            }
+            src={formData.avatar || currentUser.avatar}
             alt="profile"
             className="rounded-full h-24 w-24 object-cover cursor-pointer self-center mt-2"
           />
-
-
-          {(formData.avatar || currentUser.avatar) && (
-            <button
-              type="button"
-              onClick={handleRemoveImage}
-              className="text-red-600 dark:text-red-400 text-sm self-center "
-            >
-              Remove Image
-            </button>
-          )}
-
           <p className="text-sm self-center">
             {fileUploadError ? (
               <span className="text-red-700 dark:text-red-400">
-                Error uploading image (max 2MB)
+                Error uploading image (check file size or format)
               </span>
-            ) : filePerc > 0 && filePerc < 100 ? (
-              <span className="text-slate-700 dark:text-slate-300">{`Uploading ${filePerc}%`}</span>
             ) : filePerc === 100 ? (
               <span className="text-green-700 dark:text-green-400">
                 Image successfully uploaded!
@@ -261,7 +189,6 @@ export default function Profile() {
               ''
             )}
           </p>
-
           <input
             type="text"
             placeholder="username"
@@ -326,8 +253,7 @@ export default function Profile() {
           {showListingsVisible ? (
             <>
               <span>Hide Listings</span>
-              {/* Heroicon Eye Off */}
-              <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
                 <path d="M17.94 17.94A10.05 10.05 0 0112 19c-4.48 0-8.29-2.94-9.54-7 0-.69.1-1.36.27-2M6.38 6.38A9.985 9.985 0 0112 5c4.48 0 8.29 2.94 9.54 7-.26.82-.63 1.59-1.08 2.3M1 1l22 22" />
                 <path d="M9.88 9.88a3 3 0 014.24 4.24" />
               </svg>
@@ -335,8 +261,7 @@ export default function Profile() {
           ) : (
             <>
               <span>Show Listings</span>
-              {/* Heroicon Eye */}
-              <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+              <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2}>
                 <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z" />
                 <circle cx="12" cy="12" r="3" />
               </svg>
@@ -371,6 +296,7 @@ export default function Profile() {
                 >
                   <p>{listing.name}</p>
                 </Link>
+
                 <div className="flex flex-col items-center">
                   <button
                     onClick={() => handleListingDelete(listing._id)}
