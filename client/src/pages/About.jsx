@@ -255,7 +255,7 @@ export default function About() {
               With 2+ years in real estate, Ata Ul Mustafa leads our vision of transforming property search.
             </p>
             <div className="mt-4 flex justify-center gap-4 text-gray-500 dark:text-gray-400 text-xl">
-              <a href="https://www.facebook.com/share/15XPzJ4k95/" target="_blank" className="hover:text-blue-500"><FaFacebook /></a>
+              <a href="https://www.facebook.com/share/15XPzJ4k95" target="_blank" className="hover:text-blue-500"><FaFacebook /></a>
               <a href="https://github.com/Mustafa8382" target="_blank" className="hover:text-blue-500"><FaGithub /></a>
               <a href="https://www.linkedin.com/in/ataulmustafaansari" target="_blank" className="hover:text-blue-500"><FaLinkedin /></a>
             </div>
@@ -274,9 +274,9 @@ export default function About() {
               Tech innovator driving our platform's cutting-edge solutions.
             </p>
             <div className="mt-4 flex justify-center gap-4 text-gray-500 dark:text-gray-400 text-xl">
-              <a href="#" className="hover:text-blue-500"><FaFacebook /></a>
-              <a href="#" className="hover:text-blue-500"><FaGithub /></a>
-              <a href="#" className="hover:text-blue-500"><FaLinkedin /></a>
+              <a href="https://www.facebook.com/adeel.ahmad.77654" target="_blank" className="hover:text-blue-500"><FaFacebook /></a>
+              <a href="https://github.com/adeel-aadi" target="_blank" className="hover:text-blue-500"><FaGithub /></a>
+              <a href="https://www.linkedin.com/in/adeel-ahmad-265a24299" target="_blank" className="hover:text-blue-500"><FaLinkedin /></a>
             </div>
           </div>
         </div>
