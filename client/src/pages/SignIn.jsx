@@ -97,7 +97,7 @@ export default function SignIn() {
           </div>
 
           <div className="mt-6 text-sm text-center text-gray-600 dark:text-gray-300">
-            Don't have an account?{' '}
+            Are You New To AM Estate?{' '}
             <Link
               to="/signup"
               className="text-blue-600 dark:text-blue-400 font-medium hover:underline"
