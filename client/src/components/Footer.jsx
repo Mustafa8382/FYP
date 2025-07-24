@@ -1,6 +1,7 @@
 import React from 'react';
 import { MapPin, Phone, Mail } from "lucide-react";
 import { FaLinkedin, FaFacebook, FaGithub } from "react-icons/fa";
+import { Link } from 'react-router-dom';
 
 export default function Footer() {
   return (
@@ -25,14 +26,15 @@ export default function Footer() {
               { label: "About", href: "/about" },
               { label: "Properties", href: "/properties" },
               { label: "Contact", href: "/contact2" },
+              { label: "Converter", href: "/conversion" },
             ].map(({ label, href }) => (
               <li key={label}>
-                <a
-                  href={href}
+                <Link
+                  to={href}
                   className="hover:text-white dark:hover:text-blue-400 transition duration-200"
                 >
                   {label}
-                </a>
+                </Link>
               </li>
             ))}
           </ul>
