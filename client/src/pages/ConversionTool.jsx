@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Footer from '../components/Footer.jsx';
 import { motion } from 'framer-motion';
+import { BsTranslate } from 'react-icons/bs';
 
 const unitFactors = {
   sqft: { sqm: 0.092903, marla: 1 / 272.25, kanal: 1 / 5445, acre: 1 / 43560, hectare: 1 / 107639.1 },
@@ -13,7 +14,7 @@ const allUnits = Object.keys(unitFactors);
 
 const labels = {
   en: {
-    heading: '📐 AM Area Wizard',
+    heading: 'AM Area Wizard',
     placeholder: 'Enter a value...',
     selectUnit: 'Select Unit',
     toggleLang: 'اردو',
@@ -22,7 +23,7 @@ const labels = {
     },
   },
   ur: {
-    heading: '📐اے ایم ایریا وزرڈ',
+    heading: 'اے ایم ایریا وزرڈ',
     placeholder: 'قدر درج کریں...',
     selectUnit: 'اکائی منتخب کریں',
     toggleLang: 'ENGLISH',
@@ -67,7 +68,8 @@ const ConversionTool = () => {
           </motion.h1>
           <button
             onClick={() => setLang(lang === 'en' ? 'ur' : 'en')}
-            className="px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-semibold rounded-xl shadow transition">
+            className="flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white text-sm font-semibold rounded-xl shadow transition">
+            <BsTranslate/>
             {t.toggleLang}
           </button>
         </div>
@@ -77,8 +79,7 @@ const ConversionTool = () => {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.4 }}
-          className="bg-white/70 dark:bg-gray-800/80 backdrop-blur-md rounded-3xl shadow-2xl p-4 sm:p-6 md:p-10 border border-gray-200 dark:border-gray-700"
-        >
+          className="bg-white/70 dark:bg-gray-800/80 backdrop-blur-md rounded-3xl shadow-2xl p-4 sm:p-6 md:p-10 border border-gray-200 dark:border-gray-700">
           <div className="flex flex-col md:flex-row gap-4 md:gap-5 md:items-center justify-center mb-8">
             <input
               type="number"
