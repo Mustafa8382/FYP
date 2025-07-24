@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-export default function Contact({ listing }) {
+export default function Contact({ listing }) 
+{
   const [landlord, setLandlord] = useState(null);
   const [message, setMessage] = useState('');
 
@@ -22,7 +23,6 @@ export default function Contact({ listing }) {
     fetchLandlord();
   }, [listing.userRef]);
 
-  // Encode URI components to avoid issues in mailto link
   const encodedSubject = encodeURIComponent(`Regarding ${listing.name}`);
   const encodedBody = encodeURIComponent(message);
 
@@ -53,7 +53,7 @@ export default function Contact({ listing }) {
             Send Message
           </Link>
         </div>
-      ) : (
+        ) : (
         <p className="text-sm text-red-500 mt-4">Unable to load landlord info.</p>
       )}
     </>

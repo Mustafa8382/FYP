@@ -12,7 +12,7 @@ import UpdateListing from './pages/UpdateListing';
 import Listing from './pages/Listing';
 import Properties from './pages/Properties';
 import ConversionTool from './pages/ConversionTool';
-import OAuth from './components/OAuth'; // update the path based on your project structure
+import OAuth from './components/OAuth';
 
 export default function App() {
   return (

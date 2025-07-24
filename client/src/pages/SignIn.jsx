@@ -51,6 +51,8 @@ export default function SignIn() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-white to-blue-50 dark:from-gray-900 dark:to-gray-800 transition-all duration-500">
+
+      {/* SignIn Section */}
       <div className="flex flex-col justify-center items-center py-24 px-6 sm:px-8">
         <div className="w-full max-w-md bg-white dark:bg-gray-900 shadow-xl rounded-2xl p-8">
           <h2 className="text-4xl font-extrabold text-center text-gray-900 dark:text-white mb-6">
@@ -113,8 +115,10 @@ export default function SignIn() {
           )}
         </div>
       </div>
-
+      
+      {/* Footer */}
       <Footer />
+      
     </div>
   );
 }

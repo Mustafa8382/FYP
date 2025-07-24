@@ -99,6 +99,7 @@ export default function Footer() {
       <div className="text-center text-sm text-gray-400 dark:text-gray-500 border-t border-blue-800 dark:border-gray-700 py-5">
         © {new Date().getFullYear()} AM Real Estate. All rights reserved.
       </div>
+      
     </footer>
   );
 }

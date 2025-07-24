@@ -10,6 +10,7 @@ export default function UpdateListing() {
   const { listingId } = useParams();
 
   const [files, setFiles] = useState([]);
+
   const [formData, setFormData] = useState({
     imageUrls: [],
     name: '',
@@ -159,8 +160,11 @@ export default function UpdateListing() {
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-800 dark:text-white transition duration-300">
       <main className="max-w-5xl mx-auto px-4 py-24">
+
         <h1 className="text-3xl font-bold text-center mb-8">Update Listing</h1>
+        
         <form onSubmit={handleSubmit} className="flex flex-col md:flex-row gap-8">
+          {/* Left Part */}
           <div className="flex-1 flex flex-col gap-4">
             <input
               type="text"
@@ -248,7 +252,8 @@ export default function UpdateListing() {
               )}
             </div>
           </div>
-
+          
+          {/* Right Part */}
           <div className="flex-1 space-y-6">
             <div>
               <label className="font-medium block mb-2">
@@ -307,7 +312,10 @@ export default function UpdateListing() {
             {error && <p className="text-red-600 text-sm mt-2">{error}</p>}
           </div>
         </form>
+
       </main>
+
+      {/* Footer */}
       <Footer />
     </div>
   );

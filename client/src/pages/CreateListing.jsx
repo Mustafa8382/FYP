@@ -51,7 +51,7 @@ export default function CreateListing() {
     }
   };
 
-  const handleImageSubmit = () => {
+  const handleImageUpload = () => {
     const MAX_FILE_SIZE_MB = 5;
 
     if (files.length === 0) {
@@ -152,11 +152,11 @@ export default function CreateListing() {
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100">
       <main className="max-w-6xl mx-auto p-4 sm:p-6 md:p-10">
-        <h1 className="text-3xl md:text-4xl font-bold text-center mb-10">
-          Create New Listing
-        </h1>
+        
+        <h1 className="text-3xl md:text-4xl font-bold text-center mb-10">Create New Listing</h1>
 
         <form onSubmit={handleSubmit} className="flex flex-col lg:flex-row gap-10">
+          {/* Left Part */}
           <div className="flex-1 space-y-6">
             <div>
               <label className="font-medium block mb-1">Property Name</label>
@@ -255,6 +255,7 @@ export default function CreateListing() {
             </div>
           </div>
 
+          {/* Right Part */}
           <div className="flex-1 space-y-6">
             <div>
               <label className="font-medium block mb-2">
@@ -271,7 +272,7 @@ export default function CreateListing() {
                 />
                 <button
                   type="button"
-                  onClick={handleImageSubmit}
+                  onClick={handleImageUpload}
                   disabled={uploading}
                   className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition disabled:opacity-50"
                 >
@@ -312,7 +313,10 @@ export default function CreateListing() {
             {error && <p className="text-red-600 text-sm mt-2">{error}</p>}
           </div>
         </form>
+
       </main>
+
+      {/* Footer */}
       <Footer />
     </div>
   );

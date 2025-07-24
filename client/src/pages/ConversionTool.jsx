@@ -53,8 +53,9 @@ const ConversionTool = () => {
   const urduFont = lang === 'ur' ? 'font-[Jameel Noori Nastaleeq]' : '';
 
   return (
-    <section className="bg-gradient-to-br from-blue-100 via-white to-purple-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 pt-20 ">
-      <div className="max-w-5xl mx-auto px-4 mt-14">
+    <div className="bg-gradient-to-br from-blue-100 via-white to-purple-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 pt-20 ">
+      
+      <section className="max-w-5xl mx-auto px-4 mt-14">
         {/* Heading & Language Toggle */}
         <div className="flex flex-col sm:flex-row justify-center sm:justify-between items-center gap-4 mb-8 text-center sm:text-left">
           <motion.h1
@@ -117,13 +118,14 @@ const ConversionTool = () => {
             ))}
           </div>
         </motion.div>
-      </div>
+      </section>
 
       {/* Footer */}
-      <div className="mt-64">
+      <section className="mt-64">
         <Footer />
-      </div>
-    </section>
+      </section>
+
+    </div>
   );
 };
 

@@ -1,20 +1,13 @@
 import { useSelector } from 'react-redux';
 import { useRef, useState, useEffect } from 'react';
-import {
-  updateUserStart,
-  updateUserSuccess,
-  updateUserFailure,
-  deleteUserFailure,
-  deleteUserStart,
-  deleteUserSuccess,
-  signOutUserStart,
-} from '../redux/user/userSlice';
+import { updateUserStart, updateUserSuccess, updateUserFailure, deleteUserFailure, deleteUserStart, deleteUserSuccess, signOutUserStart } from '../redux/user/userSlice';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Footer from '../components/Footer.jsx';
-import { supabase } from '../supabaseClient.js'; // ✅ Supabase client
+import { supabase } from '../supabaseClient.js';
 
-export default function Profile() {
+export default function Profile()
+{
   const fileRef = useRef(null);
   const { currentUser, loading, error } = useSelector((state) => state.user);
   const [file, setFile] = useState(undefined);
@@ -160,8 +153,12 @@ export default function Profile() {
 
   return (
     <div className="dark:bg-gray-900 dark:text-white min-h-screen">
+
+      {/* Profile Top Section */}
       <div className="p-3 max-w-lg mx-auto">
         <h1 className="text-3xl font-semibold text-center my-7">Profile</h1>
+
+        {/* Form */}
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <input
             onChange={(e) => setFile(e.target.files[0])}
@@ -225,18 +222,17 @@ export default function Profile() {
             Create Listing
           </Link>
         </form>
-
+        
+        {/* Delete and SignOut Button */}
         <div className="flex justify-between mt-5">
           <span
             onClick={handleDeleteUser}
-            className="text-red-700 dark:text-red-400 cursor-pointer"
-          >
+            className="text-red-700 dark:text-red-400 cursor-pointer">
             Delete account
           </span>
           <span
             onClick={handleSignOut}
-            className="text-red-700 dark:text-red-400 cursor-pointer"
-          >
+            className="text-red-700 dark:text-red-400 cursor-pointer">
             Sign out
           </span>
         </div>
@@ -246,7 +242,7 @@ export default function Profile() {
           {updateSuccess ? 'User is updated successfully!' : ''}
         </p>
 
-        {/* Listings Toggle Button */}
+        {/* Listings Show Hide Toggle Button */}
         <button
           onClick={handleShowListings}
           className="text-green-700 dark:text-green-400 w-full flex items-center justify-center gap-2 mt-4">
@@ -272,7 +268,8 @@ export default function Profile() {
         <p className="text-red-700 dark:text-red-400 mt-5">
           {showListingsError ? 'Error showing listings' : ''}
         </p>
-
+        
+        {/* Profile Listing Show Hide Code */}
         {showListingsVisible && userListings.length > 0 && (
           <div className="flex flex-col gap-4">
             <h1 className="text-center mt-7 text-2xl font-semibold">
@@ -319,7 +316,10 @@ export default function Profile() {
           </div>
         )}
       </div>
+
+      {/* Footer */}
       <Footer />
+      
     </div>
   );
 }

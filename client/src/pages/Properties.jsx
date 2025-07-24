@@ -3,11 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { Search, Car, Sofa, Tag, ArrowDownUp } from 'lucide-react';
 import ListingItem from '../components/ListingItem';
 import Footer from '../components/Footer.jsx';
-import { DarkModeContext } from '../context/DarkModeContext'; // ✅ import context
 
-export default function Properties() {
+export default function Properties() 
+{
   const navigate = useNavigate();
-  const { darkMode } = useContext(DarkModeContext); // ✅ consume context
 
   const [sidebardata, setSidebardata] = useState({
     searchTerm: '',
@@ -101,12 +100,14 @@ export default function Properties() {
   };
 
   return (
-    <div className={darkMode ? 'dark' : ''}>
+    <div>
+
+      {/* Properties Upper Section */}
       <div className="flex flex-col md:flex-col bg-white dark:bg-[#111827] min-h-screen">
         <h2
           className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-center mt-20 px-4 leading-tight 
-          tracking-tight bg-gradient-to-r from-gray-900 via-blue-900 to-indigo-900 bg-clip-text text-transparent
-          dark:from-white dark:via-blue-300 dark:to-indigo-400 transition-all duration-300">
+            tracking-tight bg-gradient-to-r from-gray-900 via-blue-900 to-indigo-900 bg-clip-text text-transparent
+            dark:from-white dark:via-blue-300 dark:to-indigo-400 transition-all duration-300">
           Find Your Perfect{' '}
           <span className="block sm:inline bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent dark:from-blue-400 dark:via-purple-400 dark:to-indigo-300">
             Property
@@ -258,6 +259,7 @@ export default function Properties() {
       
       {/* Footer */}
       <Footer />
+
     </div>
   );
 }

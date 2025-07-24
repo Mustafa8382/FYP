@@ -1,19 +1,12 @@
-import {
-  FaHome,
-  FaInfoCircle,
-  FaBuilding,
-  FaEnvelope,
-  FaUser,
-  FaUserPlus,
-  FaExchangeAlt
-} from 'react-icons/fa';
+import { FaHome, FaInfoCircle, FaBuilding, FaEnvelope, FaUser, FaUserPlus, FaExchangeAlt } from 'react-icons/fa';
+import { Sun, Moon, Menu, X } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { Sun, Moon, Menu, X } from 'lucide-react';
 import { useContext, useState } from 'react';
 import { DarkModeContext } from '../context/DarkModeContext';
 
-export default function Header() {
+export default function Header() 
+{
   const { currentUser } = useSelector((state) => state.user);
   const [menuOpen, setMenuOpen] = useState(false);
   const location = useLocation();
@@ -22,7 +15,8 @@ export default function Header() {
   const isActive = (path) => location.pathname === path;
 
   return (
-    <section className="bg-white dark:bg-slate-900 shadow-md dark:shadow-slate-800 sticky top-0 z-50 transition-shadow duration-300">
+    <div className="bg-white dark:bg-slate-900 shadow-md dark:shadow-slate-800 sticky top-0 z-50 transition-shadow duration-300">
+
       <div className="max-w-7xl mx-auto px-4 md:px-8 py-3 flex justify-between items-center">
         {/* Left: Logo */}
         <Link
@@ -126,16 +120,14 @@ export default function Header() {
           {/* Light/Dark Toggle Button */}
           <button
             onClick={toggleDarkMode}
-            className="text-gray-700 dark:text-gray-200 hover:scale-110 transition"
-          >
+            className="text-gray-700 dark:text-gray-200 hover:scale-110 transition">
             {darkMode ? <Sun size={22} /> : <Moon size={22} />}
           </button>
 
           {/* Mobile Menu Toggle */}
           <button
             className="md:hidden text-slate-700 dark:text-gray-200 relative w-10 h-10 flex items-center justify-center group"
-            onClick={() => setMenuOpen(!menuOpen)}
-          >
+            onClick={() => setMenuOpen(!menuOpen)}>
             <Menu
               size={26}
               className={`absolute transition-all duration-300 transform ${
@@ -162,8 +154,7 @@ export default function Header() {
               isActive('/')
                 ? 'bg-gradient-to-r from-blue-400 to-blue-600 text-white'
                 : 'bg-blue-50 dark:bg-slate-700 hover:bg-blue-100'
-            }`}
-          >
+            }`}>
             <FaHome /> Home
           </Link>
           <Link
@@ -173,8 +164,7 @@ export default function Header() {
               isActive('/about')
                 ? 'bg-gradient-to-r from-pink-400 to-pink-600 text-white'
                 : 'bg-blue-50 dark:bg-slate-700 hover:bg-blue-100'
-            }`}
-          >
+            }`}>
             <FaInfoCircle /> About
           </Link>
           <Link
@@ -184,8 +174,7 @@ export default function Header() {
               isActive('/properties')
                 ? 'bg-gradient-to-r from-green-400 to-green-600 text-white'
                 : 'bg-blue-50 dark:bg-slate-700 hover:bg-blue-100'
-            }`}
-          >
+            }`}>
             <FaBuilding /> Properties
           </Link>
           <Link
@@ -195,8 +184,7 @@ export default function Header() {
               isActive('/contact2')
                 ? 'bg-gradient-to-r from-purple-400 to-purple-600 text-white'
                 : 'bg-blue-50 dark:bg-slate-700 hover:bg-blue-100'
-            }`}
-          >
+            }`}>
             <FaEnvelope /> Contact
           </Link>
           <Link
@@ -206,8 +194,7 @@ export default function Header() {
               isActive('/conversion')
                 ? 'bg-gradient-to-r from-blue-400 to-green-500 text-white'
                 : 'bg-blue-50 dark:bg-slate-700 hover:bg-blue-100'
-            }`}
-          >
+            }`}>
             <FaExchangeAlt /> Converter
           </Link>
 
@@ -218,8 +205,7 @@ export default function Header() {
               isActive('/profile') || isActive('/signin')
                 ? 'bg-gradient-to-r from-indigo-400 to-indigo-600 text-white'
                 : 'bg-blue-50 dark:bg-slate-700 hover:bg-blue-100'
-            }`}
-          >
+            }`}>
             {currentUser ? (
               <>
                 <img
@@ -244,13 +230,13 @@ export default function Header() {
                 isActive('/signup')
                   ? 'bg-gradient-to-r from-teal-400 to-emerald-500 text-white'
                   : 'bg-blue-50 dark:bg-slate-700 hover:bg-blue-100'
-              }`}
-            >
+              }`}>
               <FaUserPlus /> <span>Sign Up</span>
             </Link>
           )}
         </div>
       )}
-    </section>
+
+    </div>
   );
 }

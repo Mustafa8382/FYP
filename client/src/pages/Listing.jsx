@@ -8,9 +8,9 @@ import { Navigation } from 'swiper/modules';
 import 'swiper/css/bundle';
 import { FaBath, FaBed, FaChair, FaMapMarkerAlt, FaParking, FaShare, FaArrowLeft, FaShareAlt } from 'react-icons/fa';
 import Contact from '../components/Contact';
-// ... rest of your imports
 
-export default function Listing() {
+export default function Listing() 
+{
   SwiperCore.use([Navigation]);
   const [listing, setListing] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -42,7 +42,7 @@ export default function Listing() {
   }, [params.listingId]);
 
   return (
-    <main className="transition-colors duration-500 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 pt-10">
+    <div className="transition-colors duration-500 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 pt-10">
       {loading && <p className="text-center my-7 text-2xl">Loading...</p>}
       {error && <p className="text-center my-7 text-2xl">Something went wrong!</p>}
 
@@ -175,6 +175,6 @@ export default function Listing() {
 
       {/* Footer */}
       <Footer />
-    </main>
+    </div>
   );
 }

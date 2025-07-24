@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import { MdLocationOn, MdKingBed, MdBathtub } from 'react-icons/md';
 import { FaShareAlt } from 'react-icons/fa';
 
-export default function ListingItem({ listing }) {
+export default function ListingItem({ listing }) 
+{
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async (e) => {
@@ -15,6 +16,7 @@ export default function ListingItem({ listing }) {
 
   return (
     <div className="bg-white dark:bg-gray-800 shadow-md hover:shadow-lg transition-shadow overflow-hidden rounded-2xl w-full sm:w-full md:max-w-md lg:max-w-[450px] relative border dark:border-gray-700">
+      
       {/* Share Button */}
       <div className="absolute top-2 right-2 z-20">
         <button
@@ -31,6 +33,7 @@ export default function ListingItem({ listing }) {
         )}
       </div>
 
+      {/* Listing Item Box That Show On Properties and Hone Page */}
       <Link to={`/listing/${listing._id}`}>
         {/* Image Section */}
         <div className="relative">
@@ -107,6 +110,7 @@ export default function ListingItem({ listing }) {
           </div>
         </div>
       </Link>
+
     </div>
   );
 }
