@@ -1,28 +1,26 @@
 import { useEffect } from 'react';
-import { supabase } from '../supabaseClient.js'; // ✅ Your Supabase client
+import { supabase } from '../supabaseClient.js';
 import { useDispatch } from 'react-redux';
 import { signInSuccess } from '../redux/user/userSlice';
 import { useNavigate, useLocation } from 'react-router-dom';
 
-export default function OAuth() 
-{
+export default function OAuth() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
 
   const isOAuthRedirect = location.pathname === '/oauth/callback';
 
-  // Handle Google OAuth callback
   useEffect(() => {
     const handleOAuthRedirect = async () => {
-      const { data, error } = await supabase.auth.getUser();
+      const { data: sessionData, error } = await supabase.auth.getSession();
 
-      if (error || !data?.user) {
+      if (error || !sessionData?.session?.user) {
         console.log('OAuth error or no user:', error?.message);
         return;
       }
 
-      const user = data.user;
+      const user = sessionData.session.user;
 
       try {
         const res = await fetch('/Api/auth/google', {
@@ -66,7 +64,11 @@ export default function OAuth()
   };
 
   if (isOAuthRedirect) {
-    return <p className="text-center mt-10 text-lg font-medium">Signing in with Google...</p>;
+    return (
+      <p className="text-center mt-10 text-lg font-medium animate-pulse">
+        Signing in with Google...
+      </p>
+    );
   }
 
   return (
