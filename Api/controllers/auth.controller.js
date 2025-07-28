@@ -135,7 +135,7 @@ export const forgotPassword = async (req, res, next) => {
     user.resetTokenExpire = Date.now() + 3600000; // 1 hour
     await user.save();
 
-    const resetLink = `http://localhost:5173/reset-password/${token}`; 
+    
     const resetLink = `https://fyp-wtsn.onrender.com/reset-password/${token}`; // ✅ Your live site For Render
 
     const message = `Click the following link to reset your password:\n\n${resetLink}`;
