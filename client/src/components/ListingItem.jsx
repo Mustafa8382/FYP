@@ -37,9 +37,19 @@ export default function ListingItem({ listing })
       <Link to={`/listing/${listing._id}`}>
         {/* Image Section */}
         <div className="relative">
-          <div className="absolute top-2 left-2 bg-white text-black dark:bg-gray-200 px-2 py-1 text-xs font-semibold rounded shadow z-10">
-            {listing.type}
+          <div className="absolute top-2 left-2 flex flex-col gap-1 z-10">
+          {/* Type Badge (Rent / Sale) */}
+          <div className="bg-white text-black dark:bg-gray-200 px-2 py-1 text-xs font-semibold rounded shadow">
+            {listing.type === 'rent' ? 'Rent' : 'Sale'}
           </div>
+
+          {/* Offer Badge */}
+          {listing.offer && (
+            <div className="bg-red-600 text-white px-2 py-1 text-xs font-semibold rounded shadow">
+              Offer
+            </div>
+          )}
+        </div>
           <img
             src={
               listing.imageUrls[0]?.publicUrl ||
@@ -73,9 +83,7 @@ export default function ListingItem({ listing })
           <p className="text-gray-600 dark:text-gray-300 text-sm line-clamp-2 italic leading-snug">
             {listing.description}
           </p>
-
           <hr className="border-dashed border-gray-300 dark:border-gray-600" />
-
           {/* Price */}
           <div className="flex justify-between items-center">
             <p className="text-xl font-extrabold text-indigo-600 dark:text-indigo-400">
@@ -84,12 +92,16 @@ export default function ListingItem({ listing })
                 ? listing.discountPrice.toLocaleString('en-US')
                 : listing.regularPrice.toLocaleString('en-US')}
               {listing.type === 'rent' && (
-                <span className="text-sm text-gray-500 dark:text-gray-400 font-medium">
-                  {' '}
-                  / month
-                </span>
+                <span className="text-sm text-gray-500 dark:text-gray-400 font-medium"> / month</span>
               )}
             </p>
+
+            {/* Show original price if offer is true */}
+            {listing.offer && (
+              <p className="text-sm line-through text-gray-400">
+                ${listing.regularPrice.toLocaleString('en-US')}
+              </p>
+            )}
           </div>
 
           {/* Feature Badges */}

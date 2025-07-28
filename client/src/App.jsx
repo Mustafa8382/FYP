@@ -13,6 +13,8 @@ import Listing from './pages/Listing';
 import Properties from './pages/Properties';
 import ConversionTool from './pages/ConversionTool';
 import OAuth from './components/OAuth';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
 
 export default function App() {
   return (
@@ -28,6 +30,8 @@ export default function App() {
         <Route path='/listing/:listingId' element={<Listing />} />
         <Route path="/conversion" element={<ConversionTool />} />
         <Route path="/oauth/callback" element={<OAuth />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password/:token" element={<ResetPassword />} />
 
         <Route element={<PrivateRoute />}>
           <Route path='/profile' element={<Profile />} />

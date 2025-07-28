@@ -14,12 +14,23 @@ export default function SignUp() {
   const handleChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.id]: e.target.value,
+      [e.target.id]: e.target.value.trim(),
     });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!formData.username || !formData.email || !formData.password) {
+      setError('Please fill in all fields.');
+      return;
+    }
+
+    if (formData.password.length < 6) {
+      setError('Password must be at least 6 characters.');
+      return;
+    }
+
     try {
       setLoading(true);
       const res = await fetch('/Api/auth/signup', {
@@ -29,25 +40,36 @@ export default function SignUp() {
         },
         body: JSON.stringify(formData),
       });
-      const data = await res.json();
-      if (data.success === false) {
+
+      let data = {};
+      try {
+        const text = await res.text();
+        data = text ? JSON.parse(text) : {};
+      } catch (jsonError) {
+        console.error('Error parsing JSON:', jsonError);
+        setError('Unexpected server response.');
         setLoading(false);
-        setError(data.message);
         return;
       }
+
+      if (!res.ok || data.success === false) {
+        setError(data?.message || 'Signup failed');
+        setLoading(false);
+        return;
+      }
+
       setLoading(false);
       setError(null);
       navigate('/signin');
     } catch (error) {
       setLoading(false);
-      setError(error.message);
+      setError('Something went wrong. Please try again.');
+      console.error(error);
     }
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-white to-blue-50 dark:from-gray-900 dark:to-gray-800 transition-all duration-500">
-
-      {/* SignUp Section */}
       <div className="flex flex-col justify-center items-center py-14 px-6 sm:px-8">
         <div className="w-full max-w-md bg-white dark:bg-gray-900 shadow-xl rounded-2xl p-8">
           <h2 className="text-4xl font-extrabold text-center text-gray-900 dark:text-white mb-6">
@@ -116,10 +138,8 @@ export default function SignUp() {
           )}
         </div>
       </div>
-      
-      {/* Footer */}
-      <Footer />
 
+      <Footer />
     </div>
   );
 }
