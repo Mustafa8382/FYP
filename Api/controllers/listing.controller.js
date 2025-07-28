@@ -4,12 +4,19 @@ import { errorHandler } from '../utils/error.js';
 //createListing .............
 export const createListing = async (req, res, next) => {
   try {
-    const listing = await Listing.create(req.body);
+    // Add listingId before creating
+    const listingData = {
+      ...req.body,
+      listingId: `LST${Math.floor(100000 + Math.random() * 900000)}`, // 👈 Unique ID added
+    };
+
+    const listing = await Listing.create(listingData);
     return res.status(201).json(listing);
   } catch (error) {
     next(error);
   }
 };
+
 
 //deleteListing .............
 export const deleteListing = async (req, res, next) => {
@@ -103,6 +110,7 @@ export const getListings = async (req, res, next) => {
             { name: { $regex: searchTerm, $options: 'i' } },
             { address: { $regex: searchTerm, $options: 'i' } },
             { description: { $regex: searchTerm, $options: 'i' } },
+             { listingId: { $regex: searchTerm, $options: 'i' } }, 
           ],
         },
         { offer },

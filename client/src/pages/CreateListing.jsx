@@ -138,6 +138,8 @@ export default function CreateListing() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...formData, userRef: currentUser._id }),
+        userRef: currentUser._id, // 👈 کس نے لسٹنگ بنائی
+        listingId: `LST${Math.floor(100000 + Math.random() * 900000)}` // 👈 یونیک لسٹنگ ID
       });
       const data = await res.json();
       setLoading(false);

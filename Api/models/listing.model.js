@@ -50,6 +50,11 @@ const listingSchema = new mongoose.Schema(
       type: Array,
       required: true,
     },
+      listingId: {
+      type: String,
+      unique: true,
+      required: true,
+    },
     userRef: {
       type: String,
       required: true,

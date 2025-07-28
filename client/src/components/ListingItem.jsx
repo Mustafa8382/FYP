@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { MdLocationOn, MdKingBed, MdBathtub } from 'react-icons/md';
-import { FaShareAlt } from 'react-icons/fa';
+import { FaShareAlt,FaRegCopy } from 'react-icons/fa';
 
 export default function ListingItem({ listing }) 
 {
@@ -33,7 +33,7 @@ export default function ListingItem({ listing })
         )}
       </div>
 
-      {/* Listing Item Box That Show On Properties and Hone Page */}
+      {/* Listing Item Box That Show On Properties and Home Page */}
       <Link to={`/listing/${listing._id}`}>
         {/* Image Section */}
         <div className="relative">
@@ -64,9 +64,30 @@ export default function ListingItem({ listing })
         <div className="p-4 sm:p-5 flex flex-col gap-4 text-gray-700 dark:text-gray-100">
 
           {/* Title */}
-          <h2 className="text-xl font-bold text-slate-800 dark:text-white">
-            {listing.name}
-          </h2>
+          <div className="flex flex-col gap-1 z-[5] relative">
+            {/* Listing Title */}
+            <h2 className="text-xl font-bold text-slate-800 dark:text-white truncate" title={listing.name}>
+              {listing.name}
+            </h2>
+
+            {/* Listing ID + Copy Button */}
+            <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 font-mono tracking-wide z-[5] relative">
+              <span>
+                ID: <span>{listing.listingId}</span>
+              </span>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                  navigator.clipboard.writeText(listing.listingId);
+                }}
+                title="Copy Listing ID"
+                className="text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition z-[5]"
+              >
+                <FaRegCopy className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
 
           {/* Address */}
           <div className="flex items-center gap-2 text-xs font-medium bg-white/70 dark:bg-gray-700/60 backdrop-blur-md px-3 py-1 rounded-full w-fit max-w-full border border-gray-200 dark:border-gray-600 shadow-inner overflow-hidden">
