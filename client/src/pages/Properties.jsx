@@ -244,15 +244,16 @@ export default function Properties()
             )}
 
             {showMore && (
-              <div className="w-full flex justify-center mt-8">
+              <div className="w-full flex justify-center mt-10">
                 <button
                   onClick={onShowMoreClick}
-                  className="text-green-700 dark:text-green-400 hover:underline text-lg font-medium"
+                  className="bg-green-600 dark:bg-green-500 hover:bg-green-700 dark:hover:bg-green-600 text-white px-6 py-2 rounded-full text-lg font-semibold shadow-md transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-400"
                 >
-                  Show more
+                  Show More Listings
                 </button>
               </div>
             )}
+
           </div>
         </div>
       </div>
