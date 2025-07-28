@@ -3,6 +3,7 @@ import { supabase } from '../supabaseClient.js';
 import { useDispatch } from 'react-redux';
 import { signInSuccess } from '../redux/user/userSlice';
 import { useNavigate, useLocation } from 'react-router-dom';
+import logo from '../assets/logo.png';
 
 export default function OAuth() {
   const dispatch = useDispatch();
@@ -65,9 +66,38 @@ export default function OAuth() {
 
   if (isOAuthRedirect) {
     return (
-      <p className="text-center mt-10 text-lg font-medium animate-pulse">
-        Signing in with Google...
-      </p>
+      <div className="flex justify-center items-center h-screen bg-white dark:bg-gray-900 relative overflow-hidden animate-[fadeIn_0.5s_ease-in-out]">
+
+        {/* Background blur circles */}
+        <div className="absolute w-72 h-72 bg-blue-400 opacity-30 rounded-full blur-3xl top-10 left-10"></div>
+        <div className="absolute w-72 h-72 bg-purple-400 opacity-30 rounded-full blur-3xl bottom-10 right-10"></div>
+
+        {/* Content container */}
+        <div className="z-10 flex flex-col items-center text-center space-y-4">
+          {/* AM Estate Logo */}
+          <img
+            src={logo} // <-- Replace with your logo path
+            alt="AM Estate Logo"
+            className="w-40 h-40 object-contain mb-2"
+          />
+
+          {/* Spinner */}
+          <div
+            role="status"
+            aria-label="Redirecting after OAuth login..."
+            className="relative w-20 h-20"
+          >
+            <div className="absolute inset-0 border-[6px] border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+            <div className="absolute inset-4 bg-blue-500 rounded-full animate-ping opacity-30"></div>
+            <span className="sr-only">Redirecting after OAuth login...</span>
+          </div>
+
+          {/* Text */}
+          <p className="text-gray-700 dark:text-gray-300 text-lg font-semibold">
+            Redirecting, please wait...
+          </p>
+        </div>
+      </div>
     );
   }
 
