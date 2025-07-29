@@ -51,7 +51,7 @@ export default function ResetPassword() {
       </div>
 
       {/* Form Section */}
-      <section className="relative z-10 flex flex-col justify-center items-center py-44">
+      <section className="relative z-10 flex flex-col justify-center items-center py-48">
         <div className="w-full max-w-md bg-white dark:bg-gray-900 shadow-2xl rounded-2xl p-8 border border-gray-200 dark:border-gray-700 backdrop-blur-md">
           <h2 className="text-3xl font-bold text-center text-gray-900 dark:text-white mb-6">
             Set New Password
