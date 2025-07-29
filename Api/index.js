@@ -8,6 +8,7 @@ import emailRoutes from './routes/email.routes.js';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import path from 'path';
+import testimonialRoutes from './routes/testimonial.routes.js';
 dotenv.config();
 
 mongoose
@@ -31,6 +32,7 @@ mongoose
   app.use('/Api/auth', authRouter);
   app.use('/Api/listing', listingRouter);
   app.use('/Api/email', emailRoutes);
+  app.use('/api/testimonials', testimonialRoutes);
 
   // ✅ Serve frontend
   app.use(express.static(path.join(__dirname, '/client/dist')));

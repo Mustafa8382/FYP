@@ -1,29 +1,44 @@
-import { Star, Users, HomeIcon, Shield, Sparkles, TrendingUp, Award, ArrowRight, ChevronRight, CheckCircle} from "lucide-react";
+// --------------------------- Imports ---------------------------
+
+// Icons from lucide-react for UI
+import { Star, Users, HomeIcon, Shield, Sparkles, TrendingUp, Award, ArrowRight, ChevronRight} from "lucide-react";
+
+// Logos object for company logos
 import { logos } from '../assets/logo';
+
+// Animation library
 import { motion } from "framer-motion";
+
+// Icons for filters
 import { Search, Car, Sofa, Tag, ArrowDownUp } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+
+// React Router navigation
+import { useNavigate, Link } from 'react-router-dom';
+
+// Layout components
 import Footer from '../components/Footer.jsx';
+import Testimonials from '../components/Testimonials';
+import ListingItem from '../components/ListingItem';
 
 import heroimage from "../assets/heroimage.png";
-// For Testimonial Images
-import faizanImg from '../assets/about3.jpg';
-import awaisImg from '../assets/about4.jpg';
-import rafaqatImg from '../assets/about5.jpg';
-import hafizImg from '../assets/about6.jpg';
-import sohaibImg from '../assets/about7.jpg';
-import muazimImg from '../assets/about8.jpg';
 
+// Text gradient for hero title
 import { RadialGradient } from "react-text-gradients";
+
+// Hooks
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+
+// Swiper carousel
 import { Navigation } from 'swiper/modules';
 import SwiperCore from 'swiper';
 import 'swiper/css/bundle';
-import { features } from "../assets/featuredata";
-import ListingItem from '../components/ListingItem';
 
-// Stats Used In the Hero Section
+// Feature data
+import { features } from "../assets/featuredata";
+
+// --------------------------- Static Data ---------------------------
+
+// Stats used in the hero section
 const heroStats = [
   { icon: Users, value: "50K+", label: "Happy Customers", color: "from-blue-500 to-cyan-500" },
   { icon: HomeIcon, value: "25K+", label: "Properties Listed", color: "from-green-500 to-emerald-500" },
@@ -31,7 +46,26 @@ const heroStats = [
   { icon: Shield, value: "100%", label: "Verified Properties", color: "from-purple-500 to-pink-500" }
 ];
 
-// Enhanced animation variants
+// Stats used in the company trust section
+const stats = [
+  { icon: Users, value: "200+", label: "Trusted Partners" },
+  { icon: Star, value: "4.9", label: "Average Rating" },
+  { icon: Award, value: "50M+", label: "Properties Listed" },
+  { icon: TrendingUp, value: "98%", label: "Success Rate" }
+];
+
+// Companies logos used in the grid section
+const companyLogos = [
+  { src: logos.Googlelogo, alt: "Google", name: "Google" },
+  { src: logos.Bookinglogo, alt: "Booking.com", name: "Booking.com" },
+  { src: logos.Airbnblogo, alt: "Airbnb", name: "Airbnb" },
+  { src: logos.Microsoftlogo, alt: "Microsoft", name: "Microsoft" },
+  { src: logos.Amazonlogo, alt: "Amazon", name: "Amazon" }
+];
+
+// --------------------------- Animation Variants ---------------------------
+
+// Fade and stagger children animation
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -43,7 +77,7 @@ const containerVariants = {
   }
 };
 
-// Item variants for individual elements
+// Element entrance animation
 const itemVariants = {
   hidden: { opacity: 0, y: 30, scale: 0.95 },
   visible: { 
@@ -59,7 +93,7 @@ const itemVariants = {
   }
 };
 
-// Floating Animation for background elements
+// Repeated floating background animations
 const floatingAnimation = {
   y: [-10, 10, -10],
   transition: {
@@ -69,6 +103,7 @@ const floatingAnimation = {
   }
 };
 
+// Logo animation variant
 const logoVariants = {
   hidden: { opacity: 0, scale: 0.8 },
   visible: { 
@@ -82,28 +117,7 @@ const logoVariants = {
   }
 };
 
-const stats = [
-  { icon: Users, value: "200+", label: "Trusted Partners" },
-  { icon: Star, value: "4.9", label: "Average Rating" },
-  { icon: Award, value: "50M+", label: "Properties Listed" },
-  { icon: TrendingUp, value: "98%", label: "Success Rate" }
-];
-const testimonialStats = [
-  { icon: Users, value: "1K+", label: "Happy Clients", color: "from-blue-500 to-cyan-500" },
-  { icon: Star, value: "3.9", label: "Average Rating", color: "from-green-500 to-emerald-500" },
-  { icon: Award, value: "10+", label: "Awards Won", color: "from-yellow-500 to-orange-500" },
-  { icon: TrendingUp, value: "4.9", label: "Success Rate", color: "from-purple-500 to-pink-500" }
-];
-
-const companyLogos = [
-  { src: logos.Googlelogo, alt: "Google", name: "Google" },
-  { src: logos.Bookinglogo, alt: "Booking.com", name: "Booking.com" },
-  { src: logos.Airbnblogo, alt: "Airbnb", name: "Airbnb" },
-  { src: logos.Microsoftlogo, alt: "Microsoft", name: "Microsoft" },
-  { src: logos.Amazonlogo, alt: "Amazon", name: "Amazon" }
-];
-
-// Enhanced animation variants For Features Section ......
+// Feature section animations
 const containerVariantsfeature = {
   hidden: { opacity: 0 },
   visible: {
@@ -114,7 +128,6 @@ const containerVariantsfeature = {
     },
   },
 };
-
 const cardVariantsfeature = {
   hidden: { opacity: 0, y: 50, scale: 0.9 },
   visible: { 
@@ -129,7 +142,6 @@ const cardVariantsfeature = {
     }
   },
 };
-
 const headerVariantsfeature = {
   hidden: { opacity: 0, y: -20 },
   visible: { 
@@ -141,7 +153,6 @@ const headerVariantsfeature = {
     }
   }
 };
-
 const pulseAnimationfeature = {
   scale: [1, 1.05, 1],
   transition: { 
@@ -150,7 +161,6 @@ const pulseAnimationfeature = {
     ease: "easeInOut"
   }
 };
-
 const floatingAnimationfeature = {
   y: [-3, 3, -3],
   transition: {
@@ -160,10 +170,12 @@ const floatingAnimationfeature = {
   }
 };
 
+// --------------------------- Home Component Start ---------------------------
 export default function Home() 
 {
 
   const navigate = useNavigate();
+  // State to manage search/filter values
   const [sidebardata, setSidebardata] = useState({
     searchTerm: '',
     type: 'all',
@@ -174,6 +186,7 @@ export default function Home()
     order: 'desc',
   });
 
+  // Input change handler
   const handleChange = (e) => {
     const { id, value, checked } = e.target;
 
@@ -195,6 +208,7 @@ export default function Home()
     }
   };
 
+  // On search submit, redirect with query parameters
   const handleSubmit = (e) => {
     e.preventDefault();
     const urlParams = new URLSearchParams();
@@ -212,6 +226,8 @@ export default function Home()
   const [offerListings, setOfferListings] = useState([]);
   const [saleListings, setSaleListings] = useState([]);
   const [rentListings, setRentListings] = useState([]);
+  
+  // Enable Swiper navigation
   SwiperCore.use([Navigation]);
   console.log(offerListings);
 
@@ -252,6 +268,7 @@ export default function Home()
     fetchOfferListings();
   }, []);
 
+  // --------------------------- JSX Return ---------------------------
   return (
     <div>
       {/* Hero Section Start Here */}
@@ -986,129 +1003,8 @@ export default function Home()
       </section>
       
       {/* Testimonial Section Start */}
-      <section className="py-28 px-6 bg-white dark:bg-[#0f172a] transition-colors duration-500">
-        <div className="text-center mb-12">
-          {/* Header Animation */}
-          <motion.div
-            variants={headerVariantsfeature}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            className="text-center mb-8">
-            <motion.div 
-              animate={floatingAnimationfeature}
-              className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-100 to-indigo-100 dark:from-blue-900/20 dark:to-indigo-900/20 text-blue-700 dark:text-blue-300 rounded-full text-sm font-semibold tracking-wide shadow-lg border border-blue-200/50 dark:border-blue-500/30">
-              <Sparkles className="w-4 h-4" />
-              Client Testimonials
-              <Sparkles className="w-4 h-4" />
-            </motion.div>
-          </motion.div>  
-
-          <h2 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-gray-900 via-blue-900 to-indigo-900 
-                dark:from-white dark:via-blue-200 dark:to-indigo-200 
-                bg-clip-text text-transparent mb-6 leading-tight">
-            What Our Clients Are{' '}
-            <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent">
-              Saying
-            </span>
-          </h2>
-
-          <div className="flex justify-center mb-8">
-            <motion.div 
-              className="w-32 h-1.5 bg-gradient-to-r from-blue-500 via-purple-500 to-indigo-600 rounded-full shadow-lg"
-              animate={pulseAnimationfeature}
-            ></motion.div>
-          </div>
-
-          <p className="text-gray-500 dark:text-gray-400 max-w-xl mx-auto mt-4">
-            Discover why thousands trust AMEstate to find their perfect property.
-            Our commitment to excellence speaks through their experiences.
-          </p>
-
-          {/* Stats Section */}
-          <motion.div
-            variants={containerVariants}
-            className="grid grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto mt-10">
-            {testimonialStats.map((stat, index) => (
-              <motion.div
-                key={index}
-                variants={itemVariants}
-                whileHover={{ y: -8, scale: 1.05 }}
-                className="bg-white/90 dark:bg-slate-800/80 backdrop-blur-md rounded-2xl p-6 text-center shadow-xl 
-                  border border-white/50 dark:border-slate-700 hover:shadow-2xl transition-all duration-300">
-                <div className={`w-14 h-14 mx-auto mb-4 bg-gradient-to-br ${stat.color} 
-                  rounded-2xl flex items-center justify-center shadow-lg`}>
-                  <stat.icon className="w-7 h-7 text-white" />
-                </div>
-                <div className="text-3xl font-bold text-gray-900 dark:text-white mb-1">{stat.value}</div>
-                <div className="text-sm text-gray-600 dark:text-gray-400 font-medium">{stat.label}</div>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-
-        {/* Testimonials Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          {/* Reusable card styles: dark mode ready */}
-          {[faizanImg, awaisImg, rafaqatImg, hafizImg, sohaibImg, muazimImg].map((imgSrc, i) => {
-            const names = ["Faizan Ali", "Muhammad Awais", "Rafaqat Ali", "Hafiz Abdul Raheem", "Muhammad Sohaib", "Malik Muazim"];
-            const places = ["Kasur, Pakistan", "Lulyani, Pakistan", "New York, NY", "Los Angeles, US", "Islamabad, Pakistan", "Cape Town, South Africa"];
-            const ratings = [5, 5, 4, 5, 5, 4];
-            const feedbacks = [
-              "Found my dream home through AMEstate. The process was seamless and the team was incredibly helpful throughout.",
-              "Exceptional service! Their attention to detail and understanding of our needs made house hunting a breeze.",
-              "Professional team that goes above and beyond. They found the perfect property within our budget.",
-              "Their AI property suggestions were on point! Found exactly what I needed faster than expected.",
-              "The virtual tours saved me so much time. The whole process was smooth and insightful.",
-              "What impressed me most was their transparency. Support team was always available to answer questions!"
-            ];
-            return (
-              <div key={i} className="bg-white dark:bg-slate-800 p-6 rounded-2xl shadow-md transition-transform duration-300 transform hover:-translate-y-2 hover:shadow-xl border border-gray-200 dark:border-slate-700">
-                <div className="mb-3">
-                  <span className="text-sm font-semibold text-yellow-600 bg-yellow-100 dark:bg-yellow-900/20 px-2 py-1 rounded-full inline-flex items-center gap-1">
-                    <CheckCircle size={14} /> Verified
-                  </span>
-                </div>
-                <p className="text-gray-700 dark:text-gray-300 text-sm mb-6 leading-relaxed">
-                  “{feedbacks[i]}”
-                </p>
-                <div className="flex items-center gap-4">
-                  <img src={imgSrc} className="w-12 h-12 rounded-full border-2 border-blue-500" />
-                  <div>
-                    <h4 className="font-semibold text-gray-800 dark:text-white text-sm">{names[i]}</h4>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">{places[i]}</p>
-                    <div className="flex text-yellow-500">
-                      {[...Array(ratings[i])].map((_, r) => (
-                        <Star key={r} size={14} fill="#facc15" stroke="none" />
-                      ))}
-                      <span className="text-xs text-gray-600 dark:text-gray-400 ml-2">{ratings[i]}.0</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-        {/* CTA Button */}
-        <div className="text-center mt-12">
-          <Link to="contact2" className="block w-full sm:w-auto">
-            <motion.button
-              whileHover={{ scale: 1.05, y: -2 }}
-              whileTap={{ scale: 0.98 }}
-              className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 
-                text-white rounded-2xl shadow-2xl hover:shadow-blue-500/25 transition-all font-semibold text-base sm:text-lg 
-                inline-flex items-center justify-center group relative overflow-hidden">
-              <span className="relative z-10 text-center">Share Your Experience</span>
-              <div className="absolute inset-0 bg-gradient-to-r from-purple-600 via-indigo-600 to-blue-600 
-                opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            </motion.button>
-          </Link>
-
-          <p className="text-gray-500 dark:text-gray-400 text-sm mt-2">
-            Join thousands of satisfied clients in our growing community
-          </p>
-        </div>
+      <section className="py-28 px-6 relative overflow-hidden bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 transition-colors duration-300">
+        <Testimonials />
       </section>
 
       {/* Footer Section Start Here */}
