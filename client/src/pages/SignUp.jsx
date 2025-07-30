@@ -20,9 +20,14 @@ export default function SignUp() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!formData.username || !formData.email || !formData.password) {
       setError('Please fill in all fields.');
+
+      // Clear the error after 5 seconds
+      setTimeout(() => {
+        setError('');
+      }, 5000);
+
       return;
     }
 

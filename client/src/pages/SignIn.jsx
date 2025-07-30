@@ -24,7 +24,13 @@ export default function SignIn() {
     e.preventDefault();
 
     if (!formData.email || !formData.password) {
-      return dispatch(signInFailure('Please fill in all fields.'));
+      dispatch(signInFailure('Please fill in all fields.'));
+
+      // Clear the error after 5 seconds
+      setTimeout(() => {
+        dispatch(signInFailure('')); // Clear the error
+      }, 5000);
+      return;
     }
 
     try {
