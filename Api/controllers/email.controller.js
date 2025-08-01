@@ -1,6 +1,6 @@
 // /controllers/email.controller.js
 import nodemailer from 'nodemailer';
-import Message from '../models/Message.js'; // import your message model
+import Message from '../models/email.model.js'; // import your message model
 
 export const sendEmail = async (req, res) => {
   const { name, email, subject, message } = req.body;
